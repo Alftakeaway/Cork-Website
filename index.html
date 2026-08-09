@@ -5,10 +5,50 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cork · Wine Bar Bistro · Wooburn Green</title>
+  <meta name="description"
+    content="Cork Wine Bar Bistro - intimate wine bar in Wooburn Green. Artisanal charcuterie, 25+ premium cheeses, curated Italian wines, live music & private events.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500&display=swap"
     rel="stylesheet">
+
+  <!-- Schema.org markup per SEO locale -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Restaurant",
+    "name": "Cork Wine Bar Bistro",
+    "image": "https://images.unsplash.com/photo-1544025162-d76694265947",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "54-55 The Green, Suffolk House",
+      "addressLocality": "Wooburn Green",
+      "addressRegion": "High Wycombe",
+      "postalCode": "HP10 0EU",
+      "addressCountry": "GB"
+    },
+    "telephone": "+441628914197",
+    "priceRange": "££",
+    "servesCuisine": ["Wine Bar", "Italian", "Bistro"],
+    "openingHoursSpecification": [{
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Tuesday", "Wednesday", "Thursday"],
+      "opens": "12:30",
+      "closes": "23:00"
+    }, {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Friday", "Saturday"],
+      "opens": "12:30",
+      "closes": "23:30"
+    }, {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Sunday",
+      "opens": "12:30",
+      "closes": "21:00"
+    }]
+  }
+  </script>
+
   <style>
     *,
     *::before,
@@ -41,7 +81,42 @@
       color: var(--ink);
       font-family: var(--fb);
       overflow-x: hidden;
-      font-size: 16px
+      font-size: 16px;
+    }
+
+    /* Animazioni on-scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal.delay-1 {
+      transition-delay: 0.15s;
+    }
+
+    .reveal.delay-2 {
+      transition-delay: 0.3s;
+    }
+
+    .reveal.delay-3 {
+      transition-delay: 0.45s;
+    }
+
+    /* Ken Burns effect sulle immagini */
+    @keyframes kenburns {
+      0% {
+        transform: scale(1) translate(0, 0);
+      }
+
+      100% {
+        transform: scale(1.08) translate(-2%, -2%);
+      }
     }
 
     /* NAV */
@@ -57,7 +132,7 @@
       justify-content: space-between;
       background: rgba(253, 250, 245, 0.94);
       backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--bw)
+      border-bottom: 1px solid var(--bw);
     }
 
     .logo {
@@ -66,19 +141,19 @@
       font-weight: 300;
       letter-spacing: .18em;
       color: var(--ink);
-      text-decoration: none
+      text-decoration: none;
     }
 
     .logo em {
       font-style: normal;
-      color: var(--gold)
+      color: var(--gold);
     }
 
     .nav-links {
       display: flex;
       gap: 1.8rem;
       list-style: none;
-      align-items: center
+      align-items: center;
     }
 
     .nav-links a {
@@ -88,11 +163,59 @@
       text-transform: uppercase;
       text-decoration: none;
       color: var(--stone);
-      transition: color .2s
+      transition: color .2s;
     }
 
     .nav-links a:hover {
-      color: var(--ink)
+      color: var(--ink);
+    }
+
+    /* Indicatore Open/Closed dinamico */
+    .open-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.75rem;
+      border-radius: 20px;
+      background: rgba(42, 61, 46, 0.08);
+      font-weight: 500;
+    }
+
+    .open-status.open {
+      background: rgba(42, 61, 46, 0.1);
+      color: var(--bottle);
+    }
+
+    .open-status.closed {
+      background: rgba(139, 78, 42, 0.08);
+      color: var(--clay);
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--clay);
+    }
+
+    .open-status.open .status-dot {
+      background: var(--bottle);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(42, 61, 46, 0.4);
+      }
+
+      50% {
+        box-shadow: 0 0 0 5px rgba(42, 61, 46, 0);
+      }
     }
 
     .nav-book {
@@ -108,11 +231,12 @@
       cursor: pointer;
       text-decoration: none;
       border-radius: 2px;
-      transition: background .2s
+      transition: background .2s;
+      margin-left: 1rem;
     }
 
     .nav-book:hover {
-      background: var(--clay)
+      background: var(--clay);
     }
 
     /* HERO */
@@ -123,7 +247,7 @@
       grid-template-columns: 1fr 1fr;
       position: relative;
       overflow: hidden;
-      padding-top: 68px
+      padding-top: 68px;
     }
 
     .hero-left {
@@ -132,7 +256,7 @@
       padding: 4rem 5% 3rem 6%;
       position: relative;
       z-index: 2;
-      min-height: calc(100vh - 68px)
+      min-height: calc(100vh - 68px);
     }
 
     .hero-tag {
@@ -143,7 +267,7 @@
       margin-bottom: 1.8rem;
       display: flex;
       align-items: center;
-      gap: .8rem
+      gap: .8rem;
     }
 
     .hero-tag::before {
@@ -151,7 +275,7 @@
       display: block;
       width: 28px;
       height: 1px;
-      background: var(--gold)
+      background: var(--gold);
     }
 
     h1 {
@@ -162,12 +286,12 @@
       color: var(--cream);
       letter-spacing: -.01em;
       margin-bottom: 1.4rem;
-      text-wrap: balance
+      text-wrap: balance;
     }
 
     h1 em {
       font-style: italic;
-      color: var(--gold-l)
+      color: var(--gold-l);
     }
 
     .hero-copy {
@@ -176,14 +300,14 @@
       color: rgba(245, 240, 232, .55);
       font-weight: 300;
       max-width: 360px;
-      margin-bottom: 2.5rem
+      margin-bottom: 2.5rem;
     }
 
     .hero-btns {
       display: flex;
       gap: 1rem;
       align-items: center;
-      flex-wrap: wrap
+      flex-wrap: wrap;
     }
 
     .btn-gold {
@@ -200,12 +324,12 @@
       text-decoration: none;
       border-radius: 2px;
       transition: background .2s, transform .15s;
-      display: inline-block
+      display: inline-block;
     }
 
     .btn-gold:hover {
       background: var(--gold-l);
-      transform: translateY(-1px)
+      transform: translateY(-1px);
     }
 
     .btn-ghost {
@@ -216,12 +340,12 @@
       letter-spacing: .08em;
       border-bottom: 1px solid rgba(245, 240, 232, .2);
       padding-bottom: 2px;
-      transition: color .2s, border-color .2s
+      transition: color .2s, border-color .2s;
     }
 
     .btn-ghost:hover {
       color: var(--cream);
-      border-color: var(--cream)
+      border-color: var(--cream);
     }
 
     .hero-quick {
@@ -230,7 +354,7 @@
       display: flex;
       gap: 2.5rem;
       border-top: 1px solid rgba(245, 240, 232, .08);
-      flex-wrap: wrap
+      flex-wrap: wrap;
     }
 
     .hq-item label {
@@ -239,7 +363,7 @@
       letter-spacing: .2em;
       text-transform: uppercase;
       color: rgba(245, 240, 232, .3);
-      margin-bottom: .2rem
+      margin-bottom: .2rem;
     }
 
     .hq-item span,
@@ -247,11 +371,11 @@
       font-size: .8rem;
       color: rgba(245, 240, 232, .65);
       font-weight: 300;
-      text-decoration: none
+      text-decoration: none;
     }
 
     .hq-item a:hover {
-      color: var(--gold)
+      color: var(--gold);
     }
 
     .hero-right {
@@ -269,10 +393,10 @@
       inset: 0;
       background: radial-gradient(ellipse at 40% 55%, rgba(184, 147, 58, .07) 0%, transparent 65%);
       z-index: 2;
-      pointer-events: none
+      pointer-events: none;
     }
 
-    /* CAROUSEL STYLES */
+    /* CAROUSEL */
     .carousel {
       position: relative;
       width: 100%;
@@ -311,6 +435,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      animation: kenburns 12s infinite alternate;
     }
 
     .carousel-btn {
@@ -357,16 +482,18 @@
       border-radius: 50%;
       background: rgba(245, 240, 232, 0.3);
       cursor: pointer;
-      transition: background 0.2s;
+      transition: background 0.2s, width 0.2s;
     }
 
     .carousel-indicator.active {
       background: var(--gold);
+      width: 24px;
+      border-radius: 4px;
     }
 
     /* SECTION BASE */
     section {
-      padding: 6rem 6%
+      padding: 6rem 6%;
     }
 
     .s-label {
@@ -377,7 +504,7 @@
       margin-bottom: .8rem;
       display: flex;
       align-items: center;
-      gap: .7rem
+      gap: .7rem;
     }
 
     .s-label::before {
@@ -385,7 +512,7 @@
       display: block;
       width: 20px;
       height: 1px;
-      background: var(--gold)
+      background: var(--gold);
     }
 
     h2 {
@@ -395,16 +522,16 @@
       line-height: 1.15;
       color: var(--ink);
       text-wrap: balance;
-      margin-bottom: 1.2rem
+      margin-bottom: 1.2rem;
     }
 
     h2 em {
-      font-style: italic
+      font-style: italic;
     }
 
     /* ABOUT */
     #about {
-      background: var(--cream)
+      background: var(--cream);
     }
 
     .about-grid {
@@ -413,7 +540,7 @@
       gap: 6rem;
       align-items: center;
       max-width: 1100px;
-      margin: 0 auto
+      margin: 0 auto;
     }
 
     .about-vis {
@@ -424,7 +551,7 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
-      position: relative
+      position: relative;
     }
 
     .about-copy p {
@@ -432,7 +559,7 @@
       line-height: 1.9;
       color: var(--stone);
       font-weight: 300;
-      margin-bottom: 1rem
+      margin-bottom: 1rem;
     }
 
     .italian-note {
@@ -446,17 +573,150 @@
       border: 1px solid rgba(184, 147, 58, .3);
       padding: .4rem .8rem;
       border-radius: 2px;
-      margin-top: .5rem
+      margin-top: .5rem;
+    }
+
+    /* CHEESE BOARD - NUOVA SEZIONE */
+    #cheese {
+      background: var(--warm);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #cheese::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23B8933A' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    .cheese-intro {
+      max-width: 600px;
+      margin: 0 auto 3rem;
+      text-align: center;
+    }
+
+    .cheese-intro h2 em {
+      color: var(--clay);
+    }
+
+    .cheese-intro p {
+      color: var(--stone);
+      font-size: 0.95rem;
+      line-height: 1.8;
+      font-weight: 300;
+      margin-top: 1rem;
+    }
+
+    .cheese-filter {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .cheese-filter button {
+      background: transparent;
+      border: 1px solid var(--bw);
+      padding: 0.5rem 1.2rem;
+      font-family: var(--fb);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      color: var(--stone);
+      transition: all 0.2s;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+
+    .cheese-filter button.active,
+    .cheese-filter button:hover {
+      background: var(--ink);
+      color: var(--cream);
+      border-color: var(--ink);
+    }
+
+    .cheese-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .cheese-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 4px;
+      border: 1px solid var(--bw);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cheese-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 0;
+      background: var(--gold);
+      transition: height 0.4s ease;
+    }
+
+    .cheese-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px -12px rgba(28, 22, 18, 0.15);
+      border-color: var(--gold-l);
+    }
+
+    .cheese-card:hover::before {
+      height: 100%;
+    }
+
+    .cheese-card.hidden {
+      display: none;
+    }
+
+    .cheese-name {
+      font-family: var(--fd);
+      font-size: 1.25rem;
+      color: var(--ink);
+      margin-bottom: 0.3rem;
+      font-weight: 400;
+    }
+
+    .cheese-tag {
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.6rem;
+      display: inline-block;
+      font-weight: 500;
+    }
+
+    .cheese-desc {
+      font-size: 0.82rem;
+      color: var(--stone);
+      line-height: 1.6;
+      font-weight: 300;
     }
 
     /* MENU */
     #menu {
       background: var(--ink);
-      padding: 6rem 6%
+      padding: 6rem 6%;
     }
 
     #menu h2 {
-      color: var(--cream)
+      color: var(--cream);
     }
 
     .menu-nav {
@@ -464,7 +724,7 @@
       gap: 0;
       border-bottom: 1px solid rgba(245, 240, 232, .08);
       margin: 2rem 0 0;
-      flex-wrap: wrap
+      flex-wrap: wrap;
     }
 
     .mtab {
@@ -480,32 +740,45 @@
       cursor: pointer;
       border-bottom: 1px solid transparent;
       margin-bottom: -1px;
-      transition: color .2s
+      transition: color .2s;
     }
 
     .mtab.active {
       color: var(--gold);
-      border-bottom-color: var(--gold)
+      border-bottom-color: var(--gold);
     }
 
     .mtab:hover:not(.active) {
-      color: rgba(245, 240, 232, .75)
+      color: rgba(245, 240, 232, .75);
     }
 
     .mpanel {
       display: none;
-      padding-top: 2rem
+      padding-top: 2rem;
     }
 
     .mpanel.active {
-      display: block
+      display: block;
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* Wine & drinks grid */
     .wine-cols {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 3rem
+      gap: 3rem;
     }
 
     .wcol-title {
@@ -518,7 +791,7 @@
       margin-bottom: .2rem;
       display: flex;
       justify-content: space-between;
-      align-items: baseline
+      align-items: baseline;
     }
 
     .wcol-sub {
@@ -527,11 +800,11 @@
       letter-spacing: .14em;
       text-transform: uppercase;
       display: flex;
-      gap: 1.2rem
+      gap: 1.2rem;
     }
 
     .wine-rows {
-      margin-top: .2rem
+      margin-top: .2rem;
     }
 
     .wr {
@@ -539,13 +812,20 @@
       justify-content: space-between;
       align-items: baseline;
       padding: .5rem 0;
-      border-bottom: 1px solid rgba(245, 240, 232, .04)
+      border-bottom: 1px solid rgba(245, 240, 232, .04);
+      transition: background 0.2s;
+    }
+
+    .wr:hover {
+      background: rgba(245, 240, 232, 0.02);
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
     }
 
     .wname {
       font-size: .88rem;
       color: var(--cream);
-      font-weight: 300
+      font-weight: 300;
     }
 
     .wprices {
@@ -554,23 +834,23 @@
       font-size: .78rem;
       color: rgba(245, 240, 232, .45);
       font-weight: 300;
-      white-space: nowrap
+      white-space: nowrap;
     }
 
     .wprices span {
       min-width: 28px;
-      text-align: right
+      text-align: right;
     }
 
     .wprices span.gold {
-      color: var(--gold)
+      color: var(--gold);
     }
 
     /* Spirits grid */
     .spirits-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 3rem
+      gap: 3rem;
     }
 
     .sg-title {
@@ -583,14 +863,14 @@
       margin-bottom: .2rem;
       display: flex;
       justify-content: space-between;
-      align-items: baseline
+      align-items: baseline;
     }
 
     .sg-size {
       font-size: .6rem;
       color: rgba(245, 240, 232, .3);
       letter-spacing: .1em;
-      text-transform: uppercase
+      text-transform: uppercase;
     }
 
     .sg-item {
@@ -598,26 +878,33 @@
       justify-content: space-between;
       align-items: baseline;
       padding: .4rem 0;
-      border-bottom: 1px solid rgba(245, 240, 232, .04)
+      border-bottom: 1px solid rgba(245, 240, 232, .04);
+      transition: background 0.2s;
+    }
+
+    .sg-item:hover {
+      background: rgba(245, 240, 232, 0.02);
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
     }
 
     .sg-name {
       font-size: .85rem;
       color: rgba(245, 240, 232, .8);
-      font-weight: 300
+      font-weight: 300;
     }
 
     .sg-price {
       font-size: .82rem;
       color: var(--gold);
       font-family: var(--fd);
-      font-weight: 300
+      font-weight: 300;
     }
 
     .sg-sub {
       font-size: .72rem;
       color: rgba(245, 240, 232, .35);
-      margin-left: .4rem
+      margin-left: .4rem;
     }
 
     .grappa-cat {
@@ -626,14 +913,14 @@
       text-transform: uppercase;
       color: rgba(245, 240, 232, .25);
       padding: .6rem 0 .2rem;
-      display: block
+      display: block;
     }
 
     /* Food menu */
     .food-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 4rem
+      gap: 4rem;
     }
 
     .food-section-title {
@@ -642,16 +929,21 @@
       font-weight: 300;
       color: var(--cream);
       margin-bottom: 1.2rem;
-      font-style: italic
+      font-style: italic;
     }
 
     .food-item {
       padding: 1rem 0;
-      border-bottom: 1px solid rgba(245, 240, 232, .06)
+      border-bottom: 1px solid rgba(245, 240, 232, .06);
+      transition: transform 0.2s;
+    }
+
+    .food-item:hover {
+      transform: translateX(4px);
     }
 
     .food-item:last-child {
-      border-bottom: none
+      border-bottom: none;
     }
 
     .fi-head {
@@ -659,14 +951,14 @@
       justify-content: space-between;
       align-items: baseline;
       margin-bottom: .25rem;
-      gap: 1rem
+      gap: 1rem;
     }
 
     .fi-name {
       font-family: var(--fd);
       font-size: 1.05rem;
       font-weight: 400;
-      color: var(--cream)
+      color: var(--cream);
     }
 
     .fi-price {
@@ -674,21 +966,21 @@
       font-size: .95rem;
       color: var(--gold);
       white-space: nowrap;
-      font-weight: 300
+      font-weight: 300;
     }
 
     .fi-desc {
       font-size: .78rem;
       color: rgba(245, 240, 232, .38);
       line-height: 1.55;
-      font-weight: 300
+      font-weight: 300;
     }
 
     .fi-note {
       font-size: .72rem;
       color: rgba(184, 147, 58, .6);
       font-style: italic;
-      margin-top: .2rem
+      margin-top: .2rem;
     }
 
     .olives-row {
@@ -696,17 +988,17 @@
       justify-content: space-between;
       align-items: baseline;
       padding: .5rem 0;
-      border-bottom: 1px solid rgba(245, 240, 232, .05)
+      border-bottom: 1px solid rgba(245, 240, 232, .05);
     }
 
     .olives-name {
       font-size: .88rem;
       color: rgba(245, 240, 232, .75);
-      font-weight: 300
+      font-weight: 300;
     }
 
     .olives-section {
-      margin-top: 2rem
+      margin-top: 2rem;
     }
 
     .olives-title {
@@ -718,7 +1010,7 @@
       font-style: italic;
       display: flex;
       justify-content: space-between;
-      align-items: baseline
+      align-items: baseline;
     }
 
     .til {
@@ -726,12 +1018,186 @@
       color: rgba(245, 240, 232, .3);
       letter-spacing: .08em;
       font-style: normal;
-      font-family: var(--fb)
+      font-family: var(--fb);
+    }
+
+    /* BEER SECTION - NUOVA */
+    .beer-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .beer-card {
+      background: rgba(245, 240, 232, 0.03);
+      border: 1px solid rgba(245, 240, 232, 0.08);
+      padding: 1rem 1.2rem;
+      border-radius: 3px;
+      transition: all 0.2s;
+    }
+
+    .beer-card:hover {
+      border-color: var(--gold);
+      background: rgba(184, 147, 58, 0.04);
+    }
+
+    .beer-name {
+      font-family: var(--fd);
+      color: var(--cream);
+      font-size: 1.05rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .beer-style {
+      font-size: 0.68rem;
+      color: var(--gold);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+
+    .beer-abv {
+      font-size: 0.78rem;
+      color: rgba(245, 240, 232, 0.5);
+      font-weight: 300;
+    }
+
+    .beer-price {
+      font-family: var(--fd);
+      color: var(--gold);
+      font-size: 0.95rem;
+    }
+
+    /* EVENTS - NUOVA SEZIONE */
+    #events {
+      background: linear-gradient(135deg, #0f0b08 0%, #1C1612 100%);
+      padding: 6rem 6%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #events::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(184, 147, 58, 0.08) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    #events h2 {
+      color: var(--cream);
+      position: relative;
+      z-index: 1;
+    }
+
+    #events .s-label {
+      position: relative;
+      z-index: 1;
+    }
+
+    .events-intro {
+      max-width: 600px;
+      color: rgba(245, 240, 232, 0.6);
+      font-size: 0.95rem;
+      line-height: 1.8;
+      font-weight: 300;
+      margin-bottom: 3rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .event-card {
+      background: rgba(245, 240, 232, 0.03);
+      border: 1px solid rgba(245, 240, 232, 0.08);
+      padding: 2rem 1.5rem;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .event-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold) 0%, var(--gold-l) 100%);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+
+    .event-card:hover {
+      background: rgba(245, 240, 232, 0.06);
+      border-color: var(--gold);
+      transform: translateY(-4px);
+    }
+
+    .event-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .event-date {
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+      font-weight: 500;
+    }
+
+    .event-title {
+      font-family: var(--fd);
+      font-size: 1.4rem;
+      color: var(--cream);
+      margin-bottom: 0.6rem;
+      font-weight: 400;
+      line-height: 1.3;
+    }
+
+    .event-desc {
+      font-size: 0.82rem;
+      color: rgba(245, 240, 232, 0.55);
+      line-height: 1.7;
+      font-weight: 300;
+      margin-bottom: 1.2rem;
+    }
+
+    .event-cta {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s;
+      font-weight: 500;
+    }
+
+    .event-cta:hover {
+      border-bottom-color: var(--gold);
     }
 
     /* BOOK */
     #book {
-      background: var(--warm)
+      background: var(--warm);
     }
 
     .book-grid {
@@ -740,13 +1206,13 @@
       gap: 6rem;
       max-width: 1100px;
       margin: 0 auto;
-      align-items: start
+      align-items: start;
     }
 
     .fg {
       display: flex;
       flex-direction: column;
-      gap: .35rem
+      gap: .35rem;
     }
 
     .fg label {
@@ -754,7 +1220,7 @@
       letter-spacing: .16em;
       text-transform: uppercase;
       color: var(--clay);
-      font-weight: 500
+      font-weight: 500;
     }
 
     .fg input,
@@ -769,45 +1235,36 @@
       border-radius: 2px;
       outline: none;
       width: 100%;
-      transition: border-color .2s
+      transition: border-color .2s;
     }
 
     .fg input:focus,
     .fg select:focus,
     .fg textarea:focus {
-      border-color: var(--gold)
+      border-color: var(--gold);
     }
 
     .fg textarea {
       min-height: 90px;
-      resize: vertical
+      resize: vertical;
     }
 
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1rem
+      gap: 1rem;
     }
 
     .book-form {
       display: grid;
-      gap: 1rem
-    }
-
-    .book-info h3 {
-      font-family: var(--fd);
-      font-size: 1.5rem;
-      font-weight: 300;
-      color: var(--ink);
-      margin-bottom: 1.5rem;
-      line-height: 1.2
+      gap: 1rem;
     }
 
     .info-row {
       display: flex;
       gap: .9rem;
       margin-bottom: 1.3rem;
-      align-items: start
+      align-items: start;
     }
 
     .info-icon {
@@ -819,7 +1276,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: .9rem
+      font-size: .9rem;
     }
 
     .info-label {
@@ -828,39 +1285,39 @@
       text-transform: uppercase;
       color: var(--gold);
       font-weight: 500;
-      margin-bottom: .2rem
+      margin-bottom: .2rem;
     }
 
     .info-val {
       font-size: .83rem;
       color: var(--stone);
       font-weight: 300;
-      line-height: 1.6
+      line-height: 1.6;
     }
 
     .info-val a {
       color: var(--ink);
-      text-decoration: none
+      text-decoration: none;
     }
 
     .info-val a:hover {
-      color: var(--gold)
+      color: var(--gold);
     }
 
     hr.div {
       border: none;
       border-top: 1px solid var(--bw);
-      margin: 1.8rem 0
+      margin: 1.8rem 0;
     }
 
     .review {
-      margin-bottom: 1.2rem
+      margin-bottom: 1.2rem;
     }
 
     .stars {
       color: var(--gold);
       font-size: .7rem;
-      margin-bottom: .3rem
+      margin-bottom: .3rem;
     }
 
     .review-text {
@@ -869,14 +1326,14 @@
       font-style: italic;
       color: var(--stone);
       line-height: 1.7;
-      margin-bottom: .3rem
+      margin-bottom: .3rem;
     }
 
     .review-author {
       font-size: .62rem;
       letter-spacing: .12em;
       text-transform: uppercase;
-      color: var(--gold-l)
+      color: var(--gold-l);
     }
 
     .booking-feedback {
@@ -887,17 +1344,85 @@
       border-radius: 2px;
       font-size: .85rem;
       margin-bottom: 1rem;
-      display: none
+      display: none;
+    }
+
+    /* PRIVATE EVENTS - NUOVA SEZIONE */
+    #private {
+      background: var(--cream);
+      padding: 6rem 6%;
+      position: relative;
+    }
+
+    .private-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      align-items: center;
+    }
+
+    .private-visual {
+      aspect-ratio: 4/5;
+      background: var(--ink);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .private-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 8s ease;
+    }
+
+    .private-visual:hover img {
+      transform: scale(1.08);
+    }
+
+    .private-copy h2 {
+      margin-bottom: 1.2rem;
+    }
+
+    .private-copy p {
+      font-size: 0.93rem;
+      line-height: 1.9;
+      color: var(--stone);
+      font-weight: 300;
+      margin-bottom: 1rem;
+    }
+
+    .private-features {
+      list-style: none;
+      margin: 2rem 0;
+    }
+
+    .private-features li {
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--bw);
+      font-size: 0.88rem;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .private-features li::before {
+      content: '✦';
+      color: var(--gold);
+      font-size: 0.9rem;
     }
 
     /* FIND */
     #find {
       background: var(--ink);
-      padding: 6rem 6%
+      padding: 6rem 6%;
     }
 
     #find h2 {
-      color: var(--cream)
+      color: var(--cream);
     }
 
     .find-grid {
@@ -905,7 +1430,7 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 3rem;
       max-width: 900px;
-      margin-top: 2.5rem
+      margin-top: 2.5rem;
     }
 
     .fc h4 {
@@ -913,7 +1438,7 @@
       font-size: 1.1rem;
       font-weight: 400;
       color: var(--cream);
-      margin-bottom: .8rem
+      margin-bottom: .8rem;
     }
 
     .fc p,
@@ -923,11 +1448,11 @@
       line-height: 1.75;
       font-weight: 300;
       text-decoration: none;
-      display: block
+      display: block;
     }
 
     .fc a:hover {
-      color: var(--gold)
+      color: var(--gold);
     }
 
     .find-cta {
@@ -942,11 +1467,11 @@
       text-decoration: none;
       border-bottom: 1px solid transparent;
       padding-bottom: 1px;
-      transition: border-color .2s
+      transition: border-color .2s;
     }
 
     .find-cta:hover {
-      border-bottom-color: var(--gold)
+      border-bottom-color: var(--gold);
     }
 
     .map-container {
@@ -955,13 +1480,115 @@
       height: 280px;
       border-radius: 3px;
       overflow: hidden;
-      border: 1px solid rgba(245, 240, 232, .1)
+      border: 1px solid rgba(245, 240, 232, .1);
     }
 
     .map-container iframe {
       width: 100%;
       height: 100%;
-      border: 0
+      border: 0;
+    }
+
+    /* INSTAGRAM FEED */
+    #insta {
+      background: var(--warm);
+      padding: 5rem 6%;
+      text-align: center;
+    }
+
+    .insta-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 0.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .insta-item {
+      aspect-ratio: 1;
+      overflow: hidden;
+      border-radius: 3px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .insta-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .insta-item::after {
+      content: '📷';
+      position: absolute;
+      inset: 0;
+      background: rgba(28, 22, 18, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 1.5rem;
+    }
+
+    .insta-item:hover img {
+      transform: scale(1.1);
+    }
+
+    .insta-item:hover::after {
+      opacity: 1;
+    }
+
+    /* NEWSLETTER */
+    #newsletter {
+      background: var(--ink);
+      padding: 4rem 6%;
+      text-align: center;
+    }
+
+    #newsletter h2 {
+      color: var(--cream);
+    }
+
+    #newsletter p {
+      color: rgba(245, 240, 232, 0.6);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+      font-weight: 300;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .newsletter-form {
+      display: flex;
+      gap: 0.5rem;
+      max-width: 450px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+
+    .newsletter-form input {
+      flex: 1;
+      min-width: 200px;
+      padding: 0.85rem 1.2rem;
+      border: 1px solid rgba(245, 240, 232, 0.15);
+      background: rgba(245, 240, 232, 0.04);
+      color: var(--cream);
+      font-family: var(--fb);
+      font-size: 0.88rem;
+      border-radius: 2px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .newsletter-form input:focus {
+      border-color: var(--gold);
+    }
+
+    .newsletter-form input::placeholder {
+      color: rgba(245, 240, 232, 0.3);
     }
 
     /* FOOTER */
@@ -972,7 +1599,7 @@
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 1rem
+      gap: 1rem;
     }
 
     .f-logo {
@@ -980,17 +1607,17 @@
       font-size: 1.1rem;
       font-weight: 300;
       letter-spacing: .16em;
-      color: rgba(245, 240, 232, .65)
+      color: rgba(245, 240, 232, .65);
     }
 
     .f-logo em {
       font-style: normal;
-      color: var(--gold)
+      color: var(--gold);
     }
 
     .f-links {
       display: flex;
-      gap: 1.5rem
+      gap: 1.5rem;
     }
 
     .f-links a {
@@ -998,17 +1625,17 @@
       color: rgba(245, 240, 232, .22);
       letter-spacing: .1em;
       text-decoration: none;
-      transition: color .2s
+      transition: color .2s;
     }
 
     .f-links a:hover {
-      color: var(--gold)
+      color: var(--gold);
     }
 
     .f-copy {
       font-size: .62rem;
       color: rgba(245, 240, 232, .18);
-      letter-spacing: .05em
+      letter-spacing: .05em;
     }
 
     /* MOBILE */
@@ -1022,7 +1649,7 @@
       background: var(--ink);
       border-top: 1px solid rgba(245, 240, 232, .06);
       padding: .75rem 1.5rem;
-      gap: .8rem
+      gap: .8rem;
     }
 
     .mob-bar a {
@@ -1034,81 +1661,95 @@
       font-weight: 500;
       letter-spacing: .1em;
       text-transform: uppercase;
-      text-decoration: none
+      text-decoration: none;
     }
 
     .mob-call {
       background: var(--gold);
-      color: var(--ink)
+      color: var(--ink);
     }
 
     .mob-book {
       background: rgba(245, 240, 232, .06);
       color: var(--cream);
-      border: 1px solid rgba(245, 240, 232, .1)
+      border: 1px solid rgba(245, 240, 232, .1);
     }
 
     @media(max-width:768px) {
       #hero {
         grid-template-columns: 1fr;
-        min-height: auto
+        min-height: auto;
       }
 
       .hero-right {
-        display: none
+        display: none;
       }
 
       .hero-left {
         padding: 3rem 5% 3rem;
-        min-height: auto
+        min-height: auto;
       }
 
       .hero-quick {
         margin-top: 2rem;
         gap: 1rem;
         flex-direction: column;
-        padding-top: 1.2rem
+        padding-top: 1.2rem;
       }
 
       .about-grid,
-      .book-grid {
-        grid-template-columns: 1fr
+      .book-grid,
+      .private-grid {
+        grid-template-columns: 1fr;
       }
 
-      .about-vis {
-        display: none
+      .about-vis,
+      .private-visual {
+        display: none;
       }
 
       .wine-cols,
       .spirits-grid,
       .food-grid,
-      .find-grid {
-        grid-template-columns: 1fr
+      .find-grid,
+      .beer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cheese-grid,
+      .events-grid,
+      .insta-grid {
+        grid-template-columns: repeat(2, 1fr);
       }
 
       .mob-bar {
-        display: flex
+        display: flex;
       }
 
       body {
-        padding-bottom: 56px
+        padding-bottom: 56px;
       }
 
       .nav-book {
-        display: none
+        display: none;
       }
 
       .nav-links {
-        display: none
+        display: none;
       }
 
       footer {
         flex-direction: column;
-        text-align: center
+        text-align: center;
       }
 
       .menu-nav {
-        overflow-x: auto
+        overflow-x: auto;
+      }
+
+      .open-status {
+        font-size: 0.6rem;
+        padding: 0.3rem 0.6rem;
       }
     }
   </style>
@@ -1120,10 +1761,14 @@
     <a href="#hero" class="logo">CORK<em>·</em></a>
     <ul class="nav-links">
       <li><a href="#about">Our Story</a></li>
+      <li><a href="#cheese">Cheese</a></li>
       <li><a href="#menu">Menu</a></li>
+      <li><a href="#events">Events</a></li>
       <li><a href="#book">Book</a></li>
       <li><a href="#find">Find Us</a></li>
     </ul>
+    <span id="openStatus" class="open-status"><span class="status-dot"></span><span
+        id="statusText">Checking...</span></span>
     <a href="#book" class="nav-book">Reserve a Table</a>
   </nav>
 
@@ -1132,8 +1777,8 @@
     <div class="hero-left">
       <div class="hero-tag">Wine Bar Bistro · Wooburn Green, Buckinghamshire</div>
       <h1>Italian heart,<br><em>village soul</em></h1>
-      <p class="hero-copy">Taglieri, focacce, and a cellar of carefully chosen wines — on the green in the heart of
-        Wooburn. Come as you are. Stay a little longer than you planned.</p>
+      <p class="hero-copy">Taglieri, 25+ artisanal cheeses, and a cellar of carefully chosen wines — on the green in the
+        heart of Wooburn. Come as you are. Stay a little longer than you planned.</p>
       <div class="hero-btns">
         <a href="#book" class="btn-gold">Book a Table</a>
         <a href="#menu" class="btn-ghost">Explore the menu</a>
@@ -1147,20 +1792,19 @@
       </div>
     </div>
     <div class="hero-right">
-      <!-- CAROUSEL -->
       <div class="carousel">
         <div class="carousel-track-container">
           <div class="carousel-slide current-slide">
             <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1000&q=80"
-              alt="Tagliere di salumi misti italiani">
+              alt="Tagliere di salumi misti italiani" loading="lazy">
           </div>
           <div class="carousel-slide">
             <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=1000&q=80"
-              alt="Calice di vino e atmosfera del wine bar">
+              alt="Calice di vino e atmosfera del wine bar" loading="lazy">
           </div>
           <div class="carousel-slide">
-            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1000&q=80"
-              alt="Bistrot e interni accoglienti">
+            <img src="https://images.unsplash.com/photo-1555396273-367a4eb4db5?auto=format&fit=crop&w=1000&q=80"
+              alt="Bistrot e interni accoglienti" loading="lazy">
           </div>
         </div>
         <button class="carousel-btn prev" onclick="moveHeroSlide(-1)">&#10094;</button>
@@ -1178,20 +1822,19 @@
   <section id="about">
     <div class="about-grid">
       <div class="about-vis">
-        <!-- CAROUSEL ABOUT -->
         <div class="carousel">
           <div class="carousel-track-container">
             <div class="carousel-slide current-slide">
               <img src="https://images.unsplash.com/photo-1528823872057-9c018a7a7553?auto=format&fit=crop&w=1000&q=80"
-                alt="Atmosfera del locale Cork">
+                alt="Atmosfera del locale Cork" loading="lazy">
             </div>
             <div class="carousel-slide">
               <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=1000&q=80"
-                alt="Vino e taglieri">
+                alt="Vino e taglieri" loading="lazy">
             </div>
             <div class="carousel-slide">
               <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1000&q=80"
-                alt="Interni del bistrot">
+                alt="Interni del bistrot" loading="lazy">
             </div>
           </div>
           <button class="carousel-btn prev" onclick="moveAboutSlide(-1)">&#10094;</button>
@@ -1203,7 +1846,7 @@
           </div>
         </div>
       </div>
-      <div>
+      <div class="reveal">
         <div class="s-label">Our Story</div>
         <h2>A corner of<br>the village green<br>made for <em>lingering</em></h2>
         <div class="about-copy">
@@ -1221,12 +1864,95 @@
     </div>
   </section>
 
+  <!-- CHEESE BOARD - NUOVA SEZIONE -->
+  <section id="cheese">
+    <div class="cheese-intro reveal">
+      <div class="s-label" style="justify-content:center">The Cheese Board</div>
+      <h2>25+ Artisanal <em>Cheeses</em></h2>
+      <p>Curated from small Italian producers and international artisans. Build your own board or let us surprise you.
+        All served with artisan crackers, house chutneys, and sourdough.</p>
+    </div>
+
+    <div class="cheese-filter reveal delay-1">
+      <button class="active" onclick="filterCheese('all', this)">All</button>
+      <button onclick="filterCheese('italian', this)">Italian</button>
+      <button onclick="filterCheese('blue', this)">Blue</button>
+      <button onclick="filterCheese('hard', this)">Hard & Aged</button>
+      <button onclick="filterCheese('soft', this)">Soft & Fresh</button>
+      <button onclick="filterCheese('british', this)">British</button>
+    </div>
+
+    <div class="cheese-grid reveal delay-2">
+      <div class="cheese-card" data-category="italian">
+        <div class="cheese-tag">Italian · Lombardy</div>
+        <div class="cheese-name">Taleggio DOP</div>
+        <div class="cheese-desc">Washed rind, creamy paste with fruity, mild tang. Perfect with honey.</div>
+      </div>
+      <div class="cheese-card" data-category="italian">
+        <div class="cheese-tag">Italian · Piedmont</div>
+        <div class="cheese-name">Gorgonzola Dolce</div>
+        <div class="cheese-desc">Sweet, buttery blue with delicate veining. Melt-in-mouth texture.</div>
+      </div>
+      <div class="cheese-card" data-category="hard italian">
+        <div class="cheese-tag">Italian · Emilia-Romagna</div>
+        <div class="cheese-name">Parmigiano Reggiano 36m</div>
+        <div class="cheese-desc">Aged 36 months. Crystalline crunch, deep umami, nutty finish.</div>
+      </div>
+      <div class="cheese-card" data-category="soft italian">
+        <div class="cheese-tag">Italian · Puglia</div>
+        <div class="cheese-name">Burrata di Andria</div>
+        <div class="cheese-desc">Mozzarella pouch filled with fresh stracciatella and cream.</div>
+      </div>
+      <div class="cheese-card" data-category="hard italian">
+        <div class="cheese-tag">Italian · Veneto</div>
+        <div class="cheese-name">Asiago Pressato</div>
+        <div class="cheese-desc">Semi-hard, mild and buttery with a subtle nutty note.</div>
+      </div>
+      <div class="cheese-card" data-category="soft italian">
+        <div class="cheese-tag">Italian · Piedmont</div>
+        <div class="cheese-name">Robiola di Roccaverano</div>
+        <div class="cheese-desc">Soft triple-milk cheese, lactic and delicate with floral notes.</div>
+      </div>
+      <div class="cheese-card" data-category="blue">
+        <div class="cheese-tag">Italian · Piedmont</div>
+        <div class="cheese-name">Castelmagno</div>
+        <div class="cheese-desc">Rare blue-veined crumbly cheese, herbal and complex.</div>
+      </div>
+      <div class="cheese-card" data-category="hard british">
+        <div class="cheese-tag">British Special</div>
+        <div class="cheese-name">Sticky Toffee Cheddar</div>
+        <div class="cheese-desc">Mature cheddar infused with dates and caramel — dessert-like sweetness.</div>
+      </div>
+      <div class="cheese-card" data-category="soft british">
+        <div class="cheese-tag">British Special</div>
+        <div class="cheese-name">Halloumi</div>
+        <div class="cheese-desc">Grillable Cypriot cheese, squeaky texture, salty and minty.</div>
+      </div>
+      <div class="cheese-card" data-category="italian">
+        <div class="cheese-tag">Italian · Campania</div>
+        <div class="cheese-name">Pecorino Romano</div>
+        <div class="cheese-desc">Hard sheep's milk cheese, sharp and salty. Great for grating.</div>
+      </div>
+      <div class="cheese-card" data-category="soft">
+        <div class="cheese-tag">Italian · Lombardy</div>
+        <div class="cheese-name">Stracchino</div>
+        <div class="cheese-desc">Ultra-soft fresh cheese, spreadable, mild and milky.</div>
+      </div>
+      <div class="cheese-card" data-category="hard">
+        <div class="cheese-tag">Italian · Sardinia</div>
+        <div class="cheese-name">Pecorino Sardo</div>
+        <div class="cheese-desc">Aged sheep's milk, sweet and nutty with a smooth texture.</div>
+      </div>
+    </div>
+  </section>
+
   <!-- MENU -->
   <section id="menu">
     <div class="s-label">Food &amp; Drink</div>
     <h2>The Menu</h2>
     <div class="menu-nav">
       <button class="mtab active" onclick="mTab(this,'food')">Food</button>
+      <button class="mtab" onclick="mTab(this,'beer')">Craft Beer</button>
       <button class="mtab" onclick="mTab(this,'wine-glass')">Wine by the Glass</button>
       <button class="mtab" onclick="mTab(this,'spirits')">Spirits</button>
       <button class="mtab" onclick="mTab(this,'soft')">Soft Drinks &amp; AF</button>
@@ -1235,7 +1961,6 @@
     <!-- FOOD -->
     <div id="food" class="mpanel active">
       <div class="food-grid">
-        <!-- Taglieri -->
         <div>
           <div class="food-section-title">Taglieri</div>
           <div class="food-item">
@@ -1246,8 +1971,9 @@
           <div class="food-item">
             <div class="fi-head"><span class="fi-name">Tagliere formaggi</span><span class="fi-price">20 / 30</span>
             </div>
-            <div class="fi-desc">Fine selection of fresh Italian cheeses, served with jam selection and sourdough bread
+            <div class="fi-desc">Fine selection of 25+ artisanal cheeses, served with jam selection and sourdough bread
             </div>
+            <div class="fi-note">See our cheese board for the full selection</div>
           </div>
           <div class="food-item">
             <div class="fi-head"><span class="fi-name">Tagliere misto</span><span class="fi-price">25 / 35</span></div>
@@ -1263,7 +1989,6 @@
             <div class="fi-desc">Special Italian Felino salami from Parma with sourdough bread</div>
             <div class="fi-note">+ Add fresh grilled vegetables (aubergine / courgette / peppers) +5</div>
           </div>
-          <!-- Olives -->
           <div class="olives-section">
             <div class="olives-title">Olives <span class="til">£5</span></div>
             <div class="olives-row"><span class="olives-name">Nocellara</span></div>
@@ -1272,7 +1997,6 @@
             <div class="olives-row"><span class="olives-name">Silvergreen (stuffed with garlic)</span></div>
           </div>
         </div>
-        <!-- Focacce -->
         <div>
           <div class="food-section-title">Focacce</div>
           <div class="food-item">
@@ -1313,10 +2037,54 @@
         in £</p>
     </div>
 
+    <!-- BEER - NUOVA SEZIONE -->
+    <div id="beer" class="mpanel">
+      <div class="food-section-title" style="margin-bottom:1.5rem">Craft Beer on Tap</div>
+      <div class="beer-grid">
+        <div class="beer-card">
+          <div class="beer-style">Pale Ale</div>
+          <div class="beer-name">BrewDog Punk IPA</div>
+          <div class="beer-abv">5.6% ABV · Light, tropical, hoppy</div>
+          <div class="beer-price" style="margin-top:0.5rem">£5.50 / pint</div>
+        </div>
+        <div class="beer-card">
+          <div class="beer-style">Stout</div>
+          <div class="beer-name">Guinness Draught</div>
+          <div class="beer-abv">4.2% ABV · Creamy, smooth, classic</div>
+          <div class="beer-price" style="margin-top:0.5rem">£5.80 / pint</div>
+        </div>
+        <div class="beer-card">
+          <div class="beer-style">Lager</div>
+          <div class="beer-name">Birra Moretti</div>
+          <div class="beer-abv">4.6% ABV · Crisp, clean, Italian</div>
+          <div class="beer-price" style="margin-top:0.5rem">£5.50 / pint</div>
+        </div>
+        <div class="beer-card">
+          <div class="beer-style">Wheat Beer</div>
+          <div class="beer-name">Peroni Nastro Azzurro</div>
+          <div class="beer-abv">5.1% ABV · Light, refreshing</div>
+          <div class="beer-price" style="margin-top:0.5rem">£5.60 / pint</div>
+        </div>
+        <div class="beer-card">
+          <div class="beer-style">IPA</div>
+          <div class="beer-name">Beavertown Neck Oil</div>
+          <div class="beer-abv">4.3% ABV · Session IPA, citrus</div>
+          <div class="beer-price" style="margin-top:0.5rem">£5.80 / pint</div>
+        </div>
+        <div class="beer-card">
+          <div class="beer-style">Amber Ale</div>
+          <div class="beer-name">London Pride</div>
+          <div class="beer-abv">4.7% ABV · Malty, balanced, classic</div>
+          <div class="beer-price" style="margin-top:0.5rem">£5.70 / pint</div>
+        </div>
+      </div>
+      <p style="font-size:.7rem;color:rgba(245,240,232,.22);margin-top:1.8rem;font-weight:300">Order at the till · All
+        prices in £ · Selection rotates</p>
+    </div>
+
     <!-- WINE BY GLASS -->
     <div id="wine-glass" class="mpanel">
       <div class="wine-cols">
-        <!-- LEFT COL -->
         <div>
           <div class="wcol-title">Red <div class="wcol-sub"><span>175 ml</span><span>250 ml</span><span>Bottle</span>
             </div>
@@ -1374,7 +2142,6 @@
             </div>
           </div>
         </div>
-        <!-- RIGHT COL -->
         <div>
           <div class="wcol-title">White <div class="wcol-sub"><span>175 ml</span><span>250 ml</span><span>Bottle</span>
             </div>
@@ -1537,10 +2304,42 @@
     </div>
   </section>
 
+  <!-- EVENTS - NUOVA SEZIONE -->
+  <section id="events">
+    <div class="s-label">What's On</div>
+    <h2>Events &amp; Tastings</h2>
+    <p class="events-intro">From intimate wine dinners to live music nights, there's always something happening at Cork.
+      Join us for an experience, not just a drink.</p>
+
+    <div class="events-grid">
+      <div class="event-card reveal">
+        <div class="event-date">Every Thursday · 7:30 PM</div>
+        <div class="event-title">Wine Tasting Night</div>
+        <div class="event-desc">Guided tasting of 6 wines from small Italian producers. Pairings with cheese and
+          charcuterie. Limited seats.</div>
+        <a href="#book" class="event-cta">Reserve your spot →</a>
+      </div>
+      <div class="event-card reveal delay-1">
+        <div class="event-date">Every Saturday · 8:00 PM</div>
+        <div class="event-title">Live Jazz &amp; Wine</div>
+        <div class="event-desc">Local musicians set the mood while you sip and linger. No cover charge, just good vibes.
+        </div>
+        <a href="#book" class="event-cta">Book a table →</a>
+      </div>
+      <div class="event-card reveal delay-2">
+        <div class="event-date">Monthly · Private Event</div>
+        <div class="event-title">Italian Wine Masterclass</div>
+        <div class="event-desc">Deep dive into a different region each month. Piedmont, Tuscany, Sicily... learn, taste,
+          enjoy.</div>
+        <a href="#private" class="event-cta">Learn more →</a>
+      </div>
+    </div>
+  </section>
+
   <!-- BOOK -->
   <section id="book">
     <div class="book-grid">
-      <div>
+      <div class="reveal">
         <div class="s-label">Reservations</div>
         <h2>Book a <em>table</em></h2>
         <div id="bookingFeedback" class="booking-feedback">Thank you! Your reservation request has been received. We
@@ -1590,15 +2389,15 @@
             opening hours</p>
         </form>
       </div>
-      <div>
-        <h3 class="book-info"
+      <div class="reveal delay-1">
+        <h3
           style="font-family:var(--fd);font-size:1.5rem;font-weight:300;color:var(--ink);margin-bottom:1.5rem;line-height:1.2">
           Good to know<br>before you <em>arrive</em></h3>
         <div class="info-row">
           <div class="info-icon">🕔</div>
           <div>
             <div class="info-label">Opening Hours</div>
-            <div class="info-val">Tue – Fri: 5 pm until late<br>Saturday: 12 noon until late<br>Sunday: 12 noon – 9
+            <div class="info-val">Tue – Thu: 12:30 pm – 11 pm<br>Fri – Sat: 12:30 pm – 11:30 pm<br>Sunday: 12:30 pm – 9
               pm<br><span style="opacity:.5;font-size:.78rem">Closed Mondays</span></div>
           </div>
         </div>
@@ -1634,37 +2433,100 @@
     </div>
   </section>
 
+  <!-- PRIVATE EVENTS - NUOVA SEZIONE -->
+  <section id="private">
+    <div class="private-grid">
+      <div class="private-visual reveal">
+        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80"
+          alt="Private event at Cork" loading="lazy">
+      </div>
+      <div class="private-copy reveal delay-1">
+        <div class="s-label">Private Events</div>
+        <h2>Your night,<br>your <em>guests</em></h2>
+        <p>Hosting a birthday, anniversary, or corporate gathering? Cork is available for private hire on selected
+          evenings. Our intimate setting is perfect for groups of 20–50 guests.</p>
+        <ul class="private-features">
+          <li>Exclusive use of the wine bar</li>
+          <li>Bespoke tasting menus & wine pairings</li>
+          <li>Custom drink packages</li>
+          <li>Live music & entertainment</li>
+          <li>Dedicated event coordinator</li>
+        </ul>
+        <a href="#book" class="btn-gold">Enquire About Private Hire</a>
+      </div>
+    </div>
+  </section>
+
   <!-- FIND -->
   <section id="find">
     <div class="s-label">Visit Us</div>
     <h2>Come and <em>find us</em></h2>
     <div class="find-grid">
-      <div class="fc">
+      <div class="fc reveal">
         <h4>Address</h4>
         <p>Suffolk House<br>54–55 The Green<br>Wooburn Green<br>High Wycombe HP10 0EU</p>
         <a href="https://maps.google.com/?q=Suffolk+House+54-55+The+Green+Wooburn+Green+HP10+0EU" class="find-cta"
           target="_blank">→ Open in Google Maps</a>
       </div>
-      <div class="fc">
+      <div class="fc reveal delay-1">
         <h4>Get in Touch</h4>
-        <a href="tel:01628000000">01628 000000</a>
+        <a href="tel:+441628914197">+44 1628 914197</a>
         <a href="mailto:hello@corkwooburngreen.co.uk">hello@corkwooburngreen.co.uk</a>
         <a href="https://instagram.com/corkwinebarbistro" class="find-cta" style="margin-top:.8rem" target="_blank">→
           @corkwinebarbistro</a>
       </div>
-      <div class="fc">
+      <div class="fc reveal delay-2">
         <h4>Opening Hours</h4>
-        <p>Tue – Fri<br>5 pm until late</p>
-        <p style="margin-top:.6rem">Sat – Sun<br>12 noon until late<br><span style="opacity:.35;font-size:.78rem">(Sun
-            closes 9 pm)</span></p>
+        <p>Tue – Thu<br>12:30 pm – 11 pm</p>
+        <p style="margin-top:.6rem">Fri – Sat<br>12:30 pm – 11:30 pm</p>
+        <p style="margin-top:.6rem">Sunday<br>12:30 pm – 9 pm</p>
         <p style="margin-top:.6rem;opacity:.28;font-size:.78rem">Closed Mondays</p>
       </div>
     </div>
-    <div class="map-container">
+    <div class="map-container reveal">
       <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2480.9999999999995!2d-0.675!3d51.616!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487e423577777777%3A0x7777777777777777!2sSuffolk+House%2C+54-55+The+Green%2C+Wooburn+Green%2C+High+Wycombe+HP10+0EU!5e0!3m2!1sen!2suk!4v1!5m2!1sen!2suk"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2481!2d-0.675!3d51.616!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sSuffolk+House%2C+54-55+The+Green%2C+Wooburn+Green%2C+High+Wycombe+HP10+0EU!5e0!3m2!1sen!2suk!4v1"
         title="Map of Cork Wine Bar Bistro location" allowfullscreen="" loading="lazy"></iframe>
     </div>
+  </section>
+
+  <!-- INSTAGRAM FEED -->
+  <section id="insta">
+    <div class="s-label" style="justify-content:center">Follow Us</div>
+    <h2>@corkwinebarbistro</h2>
+    <div class="insta-grid">
+      <div class="insta-item"><img
+          src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=400&q=80"
+          alt="Cork Instagram 1" loading="lazy"></div>
+      <div class="insta-item"><img
+          src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=400&q=80"
+          alt="Cork Instagram 2" loading="lazy"></div>
+      <div class="insta-item"><img
+          src="https://images.unsplash.com/photo-1555396273-367a4eb4db5?auto=format&fit=crop&w=400&q=80"
+          alt="Cork Instagram 3" loading="lazy"></div>
+      <div class="insta-item"><img
+          src="https://images.unsplash.com/photo-1528823872057-9c018a7a7553?auto=format&fit=crop&w=400&q=80"
+          alt="Cork Instagram 4" loading="lazy"></div>
+      <div class="insta-item"><img
+          src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=400&q=80"
+          alt="Cork Instagram 5" loading="lazy"></div>
+      <div class="insta-item"><img
+          src="https://images.unsplash.com/photo-1470338950318-40fb6948c82b?auto=format&fit=crop&w=400&q=80"
+          alt="Cork Instagram 6" loading="lazy"></div>
+    </div>
+    <a href="https://instagram.com/corkwinebarbistro" target="_blank" class="btn-gold" style="margin-top:2rem">Follow on
+      Instagram</a>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section id="newsletter">
+    <div class="s-label" style="justify-content:center">Wine Club</div>
+    <h2>The <em>Cork Letter</em></h2>
+    <p>Get our monthly picks, event invites, and exclusive offers. No spam, just good wine.</p>
+    <form class="newsletter-form" onsubmit="handleNewsletter(event)">
+      <input type="email" placeholder="your@email.com" required>
+      <button type="submit" class="btn-gold">Subscribe</button>
+    </form>
   </section>
 
   <footer>
@@ -1672,16 +2534,18 @@
     <div class="f-links">
       <a href="https://instagram.com/corkwinebarbistro" target="_blank">Instagram</a>
       <a href="https://facebook.com" target="_blank">Facebook</a>
+      <a href="#private">Private Events</a>
     </div>
     <div class="f-copy">© 2026 Cork Wine Bar Bistro · Wooburn Green HP10 0EU</div>
   </footer>
 
   <div class="mob-bar">
-    <a href="tel:01628000000" class="mob-call">📞 Call Us</a>
+    <a href="tel:+441628914197" class="mob-call">📞 Call Us</a>
     <a href="#book" class="mob-book">Book a Table</a>
   </div>
 
   <script>
+    // MENU TABS
     function mTab(btn, id) {
       document.querySelectorAll('.mtab').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.mpanel').forEach(p => p.classList.remove('active'));
@@ -1689,7 +2553,20 @@
       document.getElementById(id).classList.add('active');
     }
 
-    // Hero Carousel Logic
+    // CHEESE FILTER
+    function filterCheese(category, btn) {
+      document.querySelectorAll('.cheese-filter button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.cheese-card').forEach(card => {
+        if (category === 'all' || card.dataset.category.includes(category)) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
+    // HERO CAROUSEL
     let heroSlideIndex = 0;
     const heroSlides = document.querySelectorAll('#hero .carousel-slide');
     const heroIndicators = document.querySelectorAll('#hero .carousel-indicator');
@@ -1697,46 +2574,30 @@
 
     function startHeroAutoPlay() {
       stopHeroAutoPlay();
-      heroInterval = setInterval(() => {
-        moveHeroSlide(1);
-      }, 5000);
+      heroInterval = setInterval(() => moveHeroSlide(1), 5000);
     }
-
-    function stopHeroAutoPlay() {
-      if (heroInterval) {
-        clearInterval(heroInterval);
-      }
-    }
-
+    function stopHeroAutoPlay() { if (heroInterval) clearInterval(heroInterval); }
     function updateHeroCarousel(index) {
       heroSlides.forEach(slide => slide.classList.remove('current-slide'));
       heroIndicators.forEach(ind => ind.classList.remove('active'));
-
       heroSlides[index].classList.add('current-slide');
       heroIndicators[index].classList.add('active');
     }
-
     function moveHeroSlide(direction) {
       heroSlideIndex += direction;
-      if (heroSlideIndex < 0) {
-        heroSlideIndex = heroSlides.length - 1;
-      } else if (heroSlideIndex >= heroSlides.length) {
-        heroSlideIndex = 0;
-      }
+      if (heroSlideIndex < 0) heroSlideIndex = heroSlides.length - 1;
+      else if (heroSlideIndex >= heroSlides.length) heroSlideIndex = 0;
       updateHeroCarousel(heroSlideIndex);
       startHeroAutoPlay();
     }
-
     function setHeroSlide(index) {
       heroSlideIndex = index;
       updateHeroCarousel(heroSlideIndex);
       startHeroAutoPlay();
     }
-
-    // Start Hero Auto Play
     startHeroAutoPlay();
 
-    // About Carousel Logic
+    // ABOUT CAROUSEL
     let aboutSlideIndex = 0;
     const aboutSlides = document.querySelectorAll('#about .carousel-slide');
     const aboutIndicators = document.querySelectorAll('#about .carousel-indicator');
@@ -1744,46 +2605,80 @@
 
     function startAboutAutoPlay() {
       stopAboutAutoPlay();
-      aboutInterval = setInterval(() => {
-        moveAboutSlide(1);
-      }, 5000);
+      aboutInterval = setInterval(() => moveAboutSlide(1), 5000);
     }
-
-    function stopAboutAutoPlay() {
-      if (aboutInterval) {
-        clearInterval(aboutInterval);
-      }
-    }
-
+    function stopAboutAutoPlay() { if (aboutInterval) clearInterval(aboutInterval); }
     function updateAboutCarousel(index) {
       aboutSlides.forEach(slide => slide.classList.remove('current-slide'));
       aboutIndicators.forEach(ind => ind.classList.remove('active'));
-
       aboutSlides[index].classList.add('current-slide');
       aboutIndicators[index].classList.add('active');
     }
-
     function moveAboutSlide(direction) {
       aboutSlideIndex += direction;
-      if (aboutSlideIndex < 0) {
-        aboutSlideIndex = aboutSlides.length - 1;
-      } else if (aboutSlideIndex >= aboutSlides.length) {
-        aboutSlideIndex = 0;
-      }
+      if (aboutSlideIndex < 0) aboutSlideIndex = aboutSlides.length - 1;
+      else if (aboutSlideIndex >= aboutSlides.length) aboutSlideIndex = 0;
       updateAboutCarousel(aboutSlideIndex);
       startAboutAutoPlay();
     }
-
     function setAboutSlide(index) {
       aboutSlideIndex = index;
       updateAboutCarousel(aboutSlideIndex);
       startAboutAutoPlay();
     }
-
-    // Start About Auto Play
     startAboutAutoPlay();
 
-    // Set minimum date for reservation to today
+    // OPEN/CLOSED STATUS
+    function updateOpenStatus() {
+      const now = new Date();
+      const day = now.getDay(); // 0=Sun, 1=Mon, ...
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      const currentTime = hours * 60 + minutes;
+
+      let isOpen = false;
+      // Tue-Thu (2-4): 12:30-23:00
+      // Fri-Sat (5-6): 12:30-23:30
+      // Sunday (0): 12:30-21:00
+      // Monday (1): closed
+
+      if (day === 0) { // Sunday
+        if (currentTime >= 750 && currentTime < 1260) isOpen = true; // 12:30-21:00
+      } else if (day >= 2 && day <= 4) { // Tue-Thu
+        if (currentTime >= 750 && currentTime < 1380) isOpen = true; // 12:30-23:00
+      } else if (day === 5 || day === 6) { // Fri-Sat
+        if (currentTime >= 750 && currentTime < 1410) isOpen = true; // 12:30-23:30
+      }
+
+      const statusEl = document.getElementById('openStatus');
+      const textEl = document.getElementById('statusText');
+
+      if (isOpen) {
+        statusEl.classList.add('open');
+        statusEl.classList.remove('closed');
+        textEl.textContent = 'Open Now';
+      } else {
+        statusEl.classList.add('closed');
+        statusEl.classList.remove('open');
+        textEl.textContent = 'Closed';
+      }
+    }
+    updateOpenStatus();
+    setInterval(updateOpenStatus, 60000);
+
+    // SCROLL REVEAL ANIMATIONS
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // RESERVATION
     const todayStr = new Date().toISOString().split('T')[0];
     document.getElementById('bookDate').setAttribute('min', todayStr);
 
@@ -1795,6 +2690,19 @@
       form.reset();
       document.getElementById('bookDate').setAttribute('min', todayStr);
       feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // NEWSLETTER
+    function handleNewsletter(event) {
+      event.preventDefault();
+      const form = event.target;
+      const input = form.querySelector('input');
+      const originalText = form.querySelector('button').textContent;
+      form.querySelector('button').textContent = '✓ Subscribed!';
+      input.value = '';
+      setTimeout(() => {
+        form.querySelector('button').textContent = originalText;
+      }, 3000);
     }
   </script>
 </body>
