@@ -1,0 +1,9 @@
+{
+    "buildCommand": "",
+    "outputDirectory": ".",
+    "functions": {
+        "api/book.js": {
+            "runtime": "nodejs22.x"
+        }
+    }
+}
