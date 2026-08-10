@@ -11,7 +11,7 @@ module.exports = async function handler(req, res) {
     };
 
     try {
-        // Email a te con i dati della prenotazione
+        // Email a te
         await fetch('https://api.resend.com/emails', {
             method: 'POST',
             headers: {
@@ -35,7 +35,7 @@ module.exports = async function handler(req, res) {
             }),
         });
 
-        // Email di conferma al cliente
+        // Conferma al cliente
         if (email) {
             await fetch('https://api.resend.com/emails', {
                 method: 'POST',
