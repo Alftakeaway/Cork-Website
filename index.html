@@ -2385,6 +2385,10 @@
             <div class="fg"><label for="bookPhone">Phone</label><input type="tel" id="bookPhone"
                 placeholder="07700 900000" required></div>
           </div>
+          <div class="form-row">
+            <div class="fg"><label for="bookEmail">Email</label><input type="email" id="bookEmail"
+                placeholder="jane@email.com"></div>
+          </div>
           <div class="fg"><label for="bookNotes">Any notes?</label><textarea id="bookNotes"
               placeholder="Allergies, dietary requirements, special occasions…"></textarea></div>
           <button type="submit" class="btn-gold" style="width:100%;padding:.85rem;font-size:.78rem">Confirm
@@ -2702,6 +2706,7 @@
         time: document.getElementById('bookTime').value,
         guests: document.getElementById('bookGuests').value,
         phone: document.getElementById('bookPhone').value,
+        email: document.getElementById('bookEmail').value,
         notes: document.getElementById('bookNotes').value,
       };
 
