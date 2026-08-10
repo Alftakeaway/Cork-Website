@@ -3,6 +3,10 @@ module.exports async function handler(req, res) {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
+    console.log('Body received:', req.body);
+    console.log('API Key exists:', !!process.env.RESEND_API_KEY);
+    console.log('Full env:', process.env);
+
     const { firstName, lastName, date, time, guests, phone, notes } = req.body;
 
     try {
