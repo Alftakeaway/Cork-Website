@@ -2686,14 +2686,46 @@
     const todayStr = new Date().toISOString().split('T')[0];
     document.getElementById('bookDate').setAttribute('min', todayStr);
 
-    function handleReservation(event) {
+    async function handleReservation(event) {
       event.preventDefault();
+
+      const btn = event.target.querySelector('button[type="submit"]');
       const feedback = document.getElementById('bookingFeedback');
-      const form = document.getElementById('reservationForm');
-      feedback.style.display = 'block';
-      form.reset();
-      document.getElementById('bookDate').setAttribute('min', todayStr);
-      feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+      btn.textContent = 'Sending...';
+      btn.disabled = true;
+
+      const data = {
+        firstName: document.getElementById('firstName').value,
+        lastName: document.getElementById('lastName').value,
+        date: document.getElementById('bookDate').value,
+        time: document.getElementById('bookTime').value,
+        guests: document.getElementById('bookGuests').value,
+        phone: document.getElementById('bookPhone').value,
+        notes: document.getElementById('bookNotes').value,
+      };
+
+      try {
+        const res = await fetch('/api/book', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        if (res.ok) {
+          feedback.style.display = 'block';
+          event.target.reset();
+          document.getElementById('bookDate').setAttribute('min', todayStr);
+          feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          btn.textContent = 'Confirm Reservation';
+          btn.disabled = false;
+        } else {
+          throw new Error();
+        }
+      } catch {
+        btn.textContent = 'Something went wrong — please call us';
+        btn.disabled = false;
+      }
     }
 
     // NEWSLETTER
