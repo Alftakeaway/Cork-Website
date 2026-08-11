@@ -1858,14 +1858,6 @@
 </head>
 
 <body>
-  <!-- COOKIE BANNER -->
-  <div id="cookieBanner"
-    style="display:none; position:fixed; bottom:0; left:0; right:0; background:#1C1612; color:#F5F0E8; padding:15px 5%; z-index:999999; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; border-top:1px solid rgba(245, 240, 232, 0.2);">
-    <p style="margin:0; font-size:14px; color:rgba(245, 240, 232, 0.8); font-family:Inter, sans-serif;">We use cookies
-      to enhance your experience. <a href="#" style="color:#B8933A; text-decoration:underline;">Privacy Policy</a></p>
-    <button onclick="acceptCookies()"
-      style="background:#B8933A; color:#1C1612; border:none; padding:10px 20px; font-family:Inter, sans-serif; font-size:12px; font-weight:500; text-transform:uppercase; letter-spacing:1px; cursor:pointer; border-radius:2px;">Accept</button>
-  </div>
   <nav>
     <a href="#hero" class="logo">CORK<em>·</em></a>
     <button id="menuToggle" class="hamburger" aria-label="Toggle menu">☰</button>
@@ -2926,17 +2918,32 @@
       }, 3000);
     }
 
-    // --- COOKIE BANNER ---
-    window.onload = function () {
+    // --- COOKIE BANNER INFALLIBILE (ANTI-VERCEL FLASH) ---
+    (function () {
+      // Controlla se non sono stati ancora accettati
       if (!localStorage.getItem('corkCookiesAccepted')) {
-        document.getElementById('cookieBanner').style.display = 'flex';
-      }
-    };
 
-    function acceptCookies() {
-      localStorage.setItem('corkCookiesAccepted', 'true');
-      document.getElementById('cookieBanner').style.display = 'none';
-    }
+        // 1. Crea il div del banner da zero
+        const banner = document.createElement('div');
+        banner.id = 'cookieBanner';
+        banner.style.cssText = 'position:fixed; bottom:0; left:0; right:0; background:#1C1612; color:#F5F0E8; padding:15px 5%; z-index:999999; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; border-top:1px solid rgba(245, 240, 232, 0.2); display:flex;';
+
+        // 2. Inserisci il testo e il bottone
+        banner.innerHTML = `
+          <p style="margin:0; font-size:14px; color:rgba(245, 240, 232, 0.8); font-family:Inter, sans-serif;">We use cookies to enhance your experience. <a href="#" style="color:#B8933A; text-decoration:underline;">Privacy Policy</a></p>
+          <button style="background:#B8933A; color:#1C1612; border:none; padding:10px 20px; font-family:Inter, sans-serif; font-size:12px; font-weight:500; text-transform:uppercase; letter-spacing:1px; cursor:pointer; border-radius:2px;">Accept</button>
+        `;
+
+        // 3. Gestisci il click direttamente nel JS
+        banner.querySelector('button').addEventListener('click', function () {
+          localStorage.setItem('corkCookiesAccepted', 'true');
+          banner.style.display = 'none';
+        });
+
+        // 4. Attacca il banner alla pagina
+        document.body.appendChild(banner);
+      }
+    })();
   </script>
 </body>
 
