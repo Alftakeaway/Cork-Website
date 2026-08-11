@@ -1858,11 +1858,13 @@
 </head>
 
 <body>
-  <!-- COOKIE BANNER UK GDPR -->
-  <div id="cookieBanner" style="display:none;">
-    <p>We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies. <a
-        href="#">Privacy Policy</a></p>
-    <button onclick="acceptCookies()" class="cookie-btn">Accept</button>
+  <!-- COOKIE BANNER -->
+  <div id="cookieBanner"
+    style="display:none; position:fixed; bottom:0; left:0; right:0; background:#1C1612; color:#F5F0E8; padding:15px 5%; z-index:999999; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; border-top:1px solid rgba(245, 240, 232, 0.2);">
+    <p style="margin:0; font-size:14px; color:rgba(245, 240, 232, 0.8); font-family:Inter, sans-serif;">We use cookies
+      to enhance your experience. <a href="#" style="color:#B8933A; text-decoration:underline;">Privacy Policy</a></p>
+    <button onclick="acceptCookies()"
+      style="background:#B8933A; color:#1C1612; border:none; padding:10px 20px; font-family:Inter, sans-serif; font-size:12px; font-weight:500; text-transform:uppercase; letter-spacing:1px; cursor:pointer; border-radius:2px;">Accept</button>
   </div>
   <nav>
     <a href="#hero" class="logo">CORK<em>·</em></a>
@@ -2649,16 +2651,7 @@
   </div>
 
   <script>
-    // --- COOKIE BANNER ---
-    // Controlla se l'utente ha già accettato i cookie
-    if (!localStorage.getItem('corkCookiesAccepted')) {
-      document.getElementById('cookieBanner').style.display = 'flex';
-    }
 
-    function acceptCookies() {
-      localStorage.setItem('corkCookiesAccepted', 'true');
-      document.getElementById('cookieBanner').style.display = 'none';
-    }
     // MENU TABS
     function mTab(btn, id) {
       document.querySelectorAll('.mtab').forEach(t => t.classList.remove('active'));
@@ -2931,6 +2924,19 @@
       setTimeout(() => {
         form.querySelector('button').textContent = originalText;
       }, 3000);
+    }
+
+    // --- COOKIE BANNER ---
+    // Controlla se l'utente ha già accettato i cookie
+    window.onload = function () {
+      // --- COOKIE BANNER ---
+      if (!localStorage.getItem('corkCookiesAccepted')) {
+        document.getElementById('cookieBanner').style.display = 'flex';
+      }
+      function acceptCookies() {
+        localStorage.setItem('corkCookiesAccepted', 'true');
+        document.getElementById('cookieBanner').style.display = 'none';
+      }
     }
   </script>
 </body>
