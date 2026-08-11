@@ -2394,16 +2394,8 @@
           <div class="form-row">
             <div class="fg"><label for="bookDate">Date</label><input type="date" id="bookDate" required></div>
             <div class="fg"><label for="bookTime">Time</label>
-              <select id="bookTime">
-                <option>17:00</option>
-                <option>17:30</option>
-                <option>18:00</option>
-                <option>18:30</option>
-                <option>19:00</option>
-                <option>19:30</option>
-                <option>20:00</option>
-                <option>20:30</option>
-                <option>21:00</option>
+              <select id="bookTime" required>
+                <option value="" disabled selected>Select a date first</option>
               </select>
             </div>
           </div>
@@ -2746,6 +2738,65 @@
     // RESERVATION
     const todayStr = new Date().toISOString().split('T')[0];
     document.getElementById('bookDate').setAttribute('min', todayStr);
+
+    // --- GESTIONE DINAMICA ORARI MODULO PRENOTAZIONE ---
+    const bookDateInput = document.getElementById('bookDate');
+    const bookTimeInput = document.getElementById('bookTime');
+
+    // Funzione per convertire l'ora in formato 12h UK (es. 2:30 PM)
+    function formatToUKTime(hours, minutes) {
+      let period = hours >= 12 ? 'PM' : 'AM';
+      let displayHours = hours > 12 ? hours - 12 : (hours === 0 ? 12 : hours);
+      return `${displayHours}:${String(minutes).padStart(2, '0')} ${period}`;
+    }
+
+    function populateTimeSlots(day) {
+      // Resetta il menu a tendina
+      bookTimeInput.innerHTML = '<option value="" disabled selected>Select time</option>';
+
+      // Imposta l'ultimo slot disponibile (22:30 per Tue-Thu, 23:00 per Fri-Sab)
+      let lastSlotHour = 22;
+
+      if (day === 5 || day === 6) { // Venerdì (5) o Sabato (6)
+        lastSlotHour = 23;
+      }
+
+      // Genera gli slot ogni 30 minuti
+      for (let h = 12; h <= lastSlotHour; h++) {
+        let startMin = (h === 12) ? 30 : 0; // Il martedì inizia alle 12:30
+
+        for (let m = startMin; m < 60; m += 30) {
+          // Se siamo all'ultima ora consentita e sono le :30, interrompi (es. non mostrare 23:30)
+          if (h === lastSlotHour && m === 30) break;
+
+          let timeValue = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+          let timeLabel = formatToUKTime(h, m);
+
+          let option = document.createElement('option');
+          option.value = timeValue;
+          option.textContent = timeLabel;
+          bookTimeInput.appendChild(option);
+        }
+      }
+    }
+
+    if (bookDateInput) {
+      bookDateInput.addEventListener('change', function () {
+        const selectedDate = new Date(this.value + 'T00:00:00'); // Aggiunge T00:00:00 per evitare fusi orari
+        const day = selectedDate.getDay(); // 0=Dom, 1=Lun, 2=Mar...
+
+        // Blocca Domenica (0) e Lunedì (1)
+        if (day === 0 || day === 1) {
+          alert('We are closed on Sundays and Mondays. Please select a valid date (Tue-Sat).');
+          this.value = ''; // Pulisce il campo data
+          bookTimeInput.innerHTML = '<option value="" disabled selected>Select date first</option>';
+          return;
+        }
+
+        // Se è un giorno valido (Mar-Sab), popola gli orari corretti
+        populateTimeSlots(day);
+      });
+    }
 
     async function handleReservation(event) {
       event.preventDefault();
