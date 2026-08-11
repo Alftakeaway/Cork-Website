@@ -1729,27 +1729,67 @@
         padding-bottom: 56px;
       }
 
-      .nav-book {
-        display: none;
+      /* HAMBURGER MENU */
+      .hamburger {
+        display: block;
       }
 
-      .nav-links {
-        display: none;
-      }
-
-      footer {
+      /* Dropdown del menu */
+      .nav-links.nav-open {
+        display: flex !important;
         flex-direction: column;
-        text-align: center;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(253, 250, 245, 0.98);
+        backdrop-filter: blur(14px);
+        padding: 1.5rem 6%;
+        gap: 1.2rem;
+        border-bottom: 1px solid var(--bw);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
       }
+    }
 
-      .menu-nav {
-        overflow-x: auto;
-      }
+    /* HAMBURGER MENU */
+    .hamburger {
+      display: none;
+      background: none;
+      border: 1px solid var(--bw);
+      color: var(--ink);
+      font-size: 1.4rem;
+      cursor: pointer;
+      padding: 0.2rem 0.6rem;
+      border-radius: 2px;
+      line-height: 1;
+      transition: border-color 0.2s;
+    }
 
-      .open-status {
-        font-size: 0.6rem;
-        padding: 0.3rem 0.6rem;
-      }
+    .hamburger:hover {
+      border-color: var(--ink);
+    }
+
+    .nav-book {
+      display: none;
+    }
+
+    .nav-links {
+      display: none;
+    }
+
+    footer {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .menu-nav {
+      overflow-x: auto;
+    }
+
+    .open-status {
+      font-size: 0.6rem;
+      padding: 0.3rem 0.6rem;
+    }
     }
   </style>
 </head>
@@ -1758,6 +1798,7 @@
 
   <nav>
     <a href="#hero" class="logo">CORK<em>·</em></a>
+    <button id="menuToggle" class="hamburger" aria-label="Toggle menu">☰</button>
     <ul class="nav-links">
       <li><a href="#about">Our Story</a></li>
       <li><a href="#cheese">Cheese</a></li>
@@ -2632,6 +2673,25 @@
     }
     startAboutAutoPlay();
 
+    // HAMBURGER MENU MOBILE
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.querySelector('.nav-links');
+
+    if (menuToggle) {
+      menuToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('nav-open');
+        // Cambia l'icona da ☰ a ✕
+        menuToggle.textContent = navLinks.classList.contains('nav-open') ? '✕' : '☰';
+      });
+
+      // Chiudi il menu se clicco su un link
+      navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          navLinks.classList.remove('nav-open');
+          menuToggle.textContent = '☰';
+        });
+      });
+    }
     // OPEN/CLOSED STATUS
     function updateOpenStatus() {
       // Fuso orario del Regno Unito (London)
