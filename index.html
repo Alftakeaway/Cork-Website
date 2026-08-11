@@ -2928,13 +2928,11 @@
 
     // --- COOKIE BANNER ---
     window.onload = function () {
-      // --- COOKIE BANNER ---
       if (!localStorage.getItem('corkCookiesAccepted')) {
         document.getElementById('cookieBanner').style.display = 'flex';
       }
-    }; // <--- QUI CHIUDI LA GRAFFA DI window.onload CON IL PUNTO E VIRGOLA
+    };
 
-    // QUESTA FUNZIONE DEVE ESSERE COMPLETAMENTE FUORI
     function acceptCookies() {
       localStorage.setItem('corkCookiesAccepted', 'true');
       document.getElementById('cookieBanner').style.display = 'none';
