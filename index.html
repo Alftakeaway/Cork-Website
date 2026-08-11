@@ -1590,6 +1590,67 @@
       color: rgba(245, 240, 232, 0.3);
     }
 
+    /* === COOKIE BANNER === */
+    #cookieBanner {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--ink);
+      color: var(--cream);
+      padding: 1rem 6%;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      z-index: 9999;
+      border-top: 1px solid rgba(245, 240, 232, 0.1);
+      font-size: 0.82rem;
+    }
+
+    #cookieBanner p {
+      color: rgba(245, 240, 232, 0.7);
+      font-weight: 300;
+      flex: 1;
+      min-width: 250px;
+      margin: 0;
+    }
+
+    #cookieBanner a {
+      color: var(--gold);
+      text-decoration: underline;
+    }
+
+    .cookie-btn {
+      background: var(--gold);
+      color: var(--ink);
+      border: none;
+      padding: 0.6rem 1.5rem;
+      font-family: var(--fb);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .cookie-btn:hover {
+      background: var(--gold-l);
+    }
+
+    /* Se è mobile, alziamo il banner sopra la barra fissa in basso */
+    @media(max-width:768px) {
+      #cookieBanner {
+        bottom: 56px;
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem 5%;
+      }
+    }
+
     /* FOOTER */
     footer {
       background: #110e0b;
@@ -1787,7 +1848,12 @@
 </head>
 
 <body>
-
+  <!-- COOKIE BANNER UK GDPR -->
+  <div id="cookieBanner" style="display:none;">
+    <p>We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies. <a
+        href="#">Privacy Policy</a></p>
+    <button onclick="acceptCookies()" class="cookie-btn">Accept</button>
+  </div>
   <nav>
     <a href="#hero" class="logo">CORK<em>·</em></a>
     <button id="menuToggle" class="hamburger" aria-label="Toggle menu">☰</button>
@@ -2573,6 +2639,16 @@
   </div>
 
   <script>
+    // --- COOKIE BANNER ---
+    // Controlla se l'utente ha già accettato i cookie
+    if (!localStorage.getItem('corkCookiesAccepted')) {
+      document.getElementById('cookieBanner').style.display = 'flex';
+    }
+
+    function acceptCookies() {
+      localStorage.setItem('corkCookiesAccepted', 'true');
+      document.getElementById('cookieBanner').style.display = 'none';
+    }
     // MENU TABS
     function mTab(btn, id) {
       document.querySelectorAll('.mtab').forEach(t => t.classList.remove('active'));
