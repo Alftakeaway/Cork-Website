@@ -30,7 +30,7 @@
     "telephone": "+441628914197",
     "priceRange": "££",
     "servesCuisine": ["Wine Bar", "Italian", "Bistro"],
-    "openingHoursSpecification": [{
+     "openingHoursSpecification": [{
       "@type": "OpeningHoursSpecification",
       "dayOfWeek": ["Tuesday", "Wednesday", "Thursday"],
       "opens": "12:30",
@@ -40,11 +40,6 @@
       "dayOfWeek": ["Friday", "Saturday"],
       "opens": "12:30",
       "closes": "23:30"
-    }, {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": "Sunday",
-      "opens": "12:30",
-      "closes": "21:00"
     }]
   }
   </script>
@@ -1790,7 +1785,8 @@
       <div class="hero-quick">
         <div class="hq-item"><label>Address</label><span>Suffolk House, 54–55 The Green, Wooburn Green HP10 0EU</span>
         </div>
-        <div class="hq-item"><label>Hours</label><span>Tue–Fri 5 pm · Sat–Sun 12 noon</span></div>
+        <div class="hq-item"><label>Hours</label><span>Tue–Thu 12:30 - 23:00 · Fri-Sat 12:30 - 23:30 · Closed Sun &
+            Mon</span></div>
         <div class="hq-item"><label>Instagram</label><a href="https://instagram.com/corkwinebarbistro"
             target="_blank">@corkwinebarbistro</a></div>
       </div>
@@ -2638,24 +2634,27 @@
 
     // OPEN/CLOSED STATUS
     function updateOpenStatus() {
+      // Fuso orario del Regno Unito (London)
       const now = new Date();
-      const day = now.getDay(); // 0=Sun, 1=Mon, ...
-      const hours = now.getHours();
-      const minutes = now.getMinutes();
+      const ukTimeStr = now.toLocaleString('en-US', { timeZone: 'Europe/London' });
+      const ukDate = new Date(ukTimeStr);
+
+      const day = ukDate.getDay(); // 0=Sun, 1=Mon, 2=Tue...
+      const hours = ukDate.getHours();
+      const minutes = ukDate.getMinutes();
       const currentTime = hours * 60 + minutes;
 
       let isOpen = false;
-      // Tue-Thu (2-4): 12:30-23:00
-      // Fri-Sat (5-6): 12:30-23:30
-      // Sunday (0): 12:30-21:00
-      // Monday (1): closed
 
-      if (day === 0) { // Sunday
-        if (currentTime >= 750 && currentTime < 1260) isOpen = true; // 12:30-21:00
-      } else if (day >= 2 && day <= 4) { // Tue-Thu
-        if (currentTime >= 750 && currentTime < 1380) isOpen = true; // 12:30-23:00
-      } else if (day === 5 || day === 6) { // Fri-Sat
-        if (currentTime >= 750 && currentTime < 1410) isOpen = true; // 12:30-23:30
+      // Monday (1) & Sunday (0): Closed
+
+      // Tuesday - Thursday (2-4): 12:30 (750) - 23:00 (1380)
+      if (day >= 2 && day <= 4) {
+        if (currentTime >= 750 && currentTime < 1380) isOpen = true;
+      }
+      // Friday - Saturday (5-6): 12:30 (750) - 23:30 (1410)
+      else if (day === 5 || day === 6) {
+        if (currentTime >= 750 && currentTime < 1410) isOpen = true;
       }
 
       const statusEl = document.getElementById('openStatus');
