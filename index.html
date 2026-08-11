@@ -1641,15 +1641,7 @@
       background: var(--gold-l);
     }
 
-    /* Se è mobile, alziamo il banner sopra la barra fissa in basso */
-    @media(max-width:768px) {
-      #cookieBanner {
-        bottom: 56px;
-        flex-direction: column;
-        text-align: center;
-        padding: 1.5rem 5%;
-      }
-    }
+
 
     /* FOOTER */
     footer {
@@ -1735,6 +1727,25 @@
       border: 1px solid rgba(245, 240, 232, .1);
     }
 
+    /* --- 1. STILE BASE HAMBURGER (Nascosto su Desktop) --- */
+    .hamburger {
+      display: none;
+      background: none;
+      border: 1px solid var(--bw);
+      color: var(--ink);
+      font-size: 1.4rem;
+      cursor: pointer;
+      padding: 0.2rem 0.6rem;
+      border-radius: 2px;
+      line-height: 1;
+      transition: border-color 0.2s;
+    }
+
+    .hamburger:hover {
+      border-color: var(--ink);
+    }
+
+    /* --- 2. TUTTE LE REGOLE MOBILE IN UN SOLO BLOCCO --- */
     @media(max-width:768px) {
       #hero {
         grid-template-columns: 1fr;
@@ -1790,12 +1801,21 @@
         padding-bottom: 56px;
       }
 
-      /* HAMBURGER MENU */
+      /* MOSTRA HAMBURGER */
       .hamburger {
-        display: block;
+        display: block !important;
       }
 
-      /* Dropdown del menu */
+      /* NASCONDI MENU DESKTOP E BOTTONE PRENOTA */
+      .nav-book {
+        display: none;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      /* DROPDOWN MENU APERTO */
       .nav-links.nav-open {
         display: flex !important;
         flex-direction: column;
@@ -1810,39 +1830,29 @@
         border-bottom: 1px solid var(--bw);
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
       }
-    }
 
-    /* HAMBURGER & MOBILE OVERRIDES */
-    .hamburger {
-      display: none;
-      /* Nascosto su Desktop */
-      background: none;
-      border: 1px solid var(--bw);
-      color: var(--ink);
-      font-size: 1.4rem;
-      cursor: pointer;
-      padding: 0.2rem 0.6rem;
-      border-radius: 2px;
-      line-height: 1;
-      transition: border-color 0.2s;
-    }
+      /* FOOTER E ALTRE REGOLE MOBILE */
+      footer {
+        flex-direction: column;
+        text-align: center;
+      }
 
-    .hamburger:hover {
-      border-color: var(--ink);
-    }
+      .menu-nav {
+        overflow-x: auto;
+      }
 
-    footer {
-      flex-direction: column;
-      text-align: center;
-    }
+      .open-status {
+        font-size: 0.6rem;
+        padding: 0.3rem 0.6rem;
+      }
 
-    .menu-nav {
-      overflow-x: auto;
-    }
-
-    .open-status {
-      font-size: 0.6rem;
-      padding: 0.3rem 0.6rem;
+      /* COOKIE BANNER MOBILE */
+      #cookieBanner {
+        bottom: 56px;
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem 5%;
+      }
     }
   </style>
 </head>
