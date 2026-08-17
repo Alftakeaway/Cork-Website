@@ -147,8 +147,8 @@ const ReviewsCarousel = (function () {
         </div>
       `;
     }
-  }
-
+}
+  
   function startAutoPlay() {
     stopAutoPlay();
     if (totalSlides <= 1) return;
@@ -165,9 +165,8 @@ const ReviewsCarousel = (function () {
     
     if (!track) return;
 
-    // Each slide takes 100% / slidesPerView of the track width
-    const slidePercent = 100 / slidesPerView;
-    const translateX = currentSlide * slidePercent;
+    // Each carousel-slide is 100% width
+    const translateX = currentSlide * 100;
     track.style.transform = `translateX(-${translateX}%)`;
 
     indicators.forEach((ind, i) => {

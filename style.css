@@ -1997,7 +1997,7 @@ footer {
     letter-spacing: 0.1em;
 }
 
-/* Carousel - horizontal scroll with flex */
+/* Carousel - horizontal flex */
 .reviews-carousel-widget .carousel {
     position: relative;
 }
@@ -2005,6 +2005,7 @@ footer {
 .reviews-carousel-widget .carousel-track-container {
     overflow: hidden;
     position: relative;
+    width: 100%;
 }
 
 .reviews-carousel-widget .carousel-track {
@@ -2020,7 +2021,6 @@ footer {
     align-items: stretch;
 }
 
-/* For multiple slides per view, we handle via JS transform */
 .reviews-carousel-widget .carousel-slide .review-slide-grid {
     width: 100%;
 }
