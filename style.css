@@ -2007,21 +2007,21 @@ footer {
 .rv-carousel {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 1.25rem;
 }
 
-/* Fixed-height card — tall enough for the longest review + breathing room */
+/* Fixed-height card — wide, space below text so card NEVER resizes */
 .rv-card {
     flex: 1;
-    min-height: 160px;
-    /* calibrated on longest review */
+    height: 200px;
     background: white;
     border: 1px solid var(--bw);
     border-radius: 3px;
-    padding: 1.75rem 2rem;
+    padding: 2rem 3rem;
     display: flex;
-    align-items: center;
-    /* vertically centre content */
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow: hidden;
     transition: opacity 0.2s ease;
 }
 
@@ -2032,8 +2032,7 @@ footer {
 .rv-card-inner {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-    width: 100%;
+    gap: 0.6rem;
 }
 
 .rv-stars {
@@ -2044,11 +2043,15 @@ footer {
 
 .rv-text {
     color: var(--stone);
-    font-size: 0.9rem;
-    line-height: 1.7;
+    font-size: 0.92rem;
+    line-height: 1.65;
     font-weight: 300;
     font-style: italic;
     margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .rv-author {
@@ -2144,8 +2147,8 @@ footer {
     }
 
     .rv-card {
-        padding: 1.25rem 1rem;
-        min-height: 140px;
+        padding: 1.5rem 1.25rem;
+        height: 200px;
     }
 
     .rv-text {
