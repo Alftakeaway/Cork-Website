@@ -1,9 +1,20 @@
-// Local Reviews Widget - reads reviews.json from repo
-// Usage: <div id="reviews-widget"></div> + initReviewsWidget()
+// Local Reviews Carousel Widget - reads reviews.json from repo
+// Carousel-style like hero images
 
-const ReviewsWidget = (function () {
+const ReviewsCarousel = (function () {
   let config = {};
   let reviewsData = null;
+  let currentSlide = 0;
+  let autoPlayInterval = null;
+  const SLIDES_PER_VIEW = getSlidesPerView();
+  let totalSlides = 0;
+
+  function getSlidesPerView() {
+    if (window.innerWidth < 480) return 1;
+    if (window.innerWidth < 768) return 1;
+    if (window.innerWidth < 1024) return 2;
+    return 3;
+  }
 
   function renderStars(rating) {
     const full = Math.floor(rating);
@@ -12,61 +23,69 @@ const ReviewsWidget = (function () {
     return '★'.repeat(full) + (half ? '½' : '') + '☆'.repeat(empty);
   }
 
-  function formatRelativeTime(timestamp) {
-    const now = Date.now();
-    const diff = now - timestamp * 1000;
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    if (days < 1) return 'Today';
-    if (days === 1) return 'Yesterday';
-    if (days < 7) return `${days} days ago`;
-    if (days < 30) return `${Math.floor(days / 7)} weeks ago`;
-    if (days < 365) return `${Math.floor(days / 30)} months ago`;
-    return `${Math.floor(days / 365)} years ago`;
-  }
-
   function createReviewCard(review) {
     const authorName = review.author_name || 'Anonymous';
     const rating = review.rating || 0;
     const text = review.text || '';
-    const time = review.time ? formatRelativeTime(review.time) : '';
-    const profilePhoto = review.profile_photo_url || '';
 
     return `
-      <article class="g-review-card">
-        <header class="g-review-header">
-          ${profilePhoto ? `<img src="${profilePhoto}" alt="" class="g-review-avatar" loading="lazy">` : '<div class="g-review-avatar-placeholder"></div>'}
-          <div class="g-review-meta">
-            <span class="g-review-author">${authorName}</span>
-            <span class="g-review-stars" aria-label="${rating} out of 5 stars">${renderStars(rating)}</span>
-          </div>
+      <article class="review-card">
+        <header class="review-card-header">
+          <span class="review-stars" aria-label="${rating} out of 5 stars">${renderStars(rating)}</span>
+          <span class="review-author">${authorName}</span>
         </header>
-        <p class="g-review-text">${text}</p>
-        <footer class="g-review-footer">
-          <time class="g-review-time">${time}</time>
-        </footer>
+        <p class="review-text">"${text}"</p>
       </article>
     `;
   }
 
-  function createWidgetHTML(reviews, data) {
-    const avgRating = data.rating || 0;
-    const totalReviews = data.totalReviews || reviews.length;
-    const lastUpdated = data.lastUpdated ? `Updated ${data.lastUpdated}` : '';
+  function createCarouselHTML(reviews) {
+    totalSlides = Math.ceil(reviews.length / SLIDES_PER_VIEW);
+    const slides = [];
 
-    return `
-      <div class="google-reviews-widget">
-        <div class="g-reviews-summary">
-          <div class="g-rating-badge">
-            <span class="g-rating-value">${avgRating.toFixed(1)}</span>
-            <span class="g-rating-stars">${renderStars(avgRating)}</span>
-            <span class="g-rating-count">${totalReviews} reviews · ${lastUpdated}</span>
+    for (let i = 0; i < totalSlides; i++) {
+      const slideReviews = reviews.slice(i * SLIDES_PER_VIEW, (i + 1) * SLIDES_PER_VIEW);
+      slides.push(`
+        <div class="carousel-slide ${i === 0 ? 'current-slide' : ''}" data-slide="${i}">
+          <div class="review-slide-grid">
+            ${slideReviews.map(createReviewCard).join('')}
           </div>
         </div>
-        <div class="g-reviews-grid" id="gReviewsGrid">
-          ${reviews.map(createReviewCard).join('')}
+      `);
+    }
+
+    const indicators = Array.from({ length: totalSlides }, (_, i) => 
+      `<button class="carousel-indicator ${i === 0 ? 'active' : ''}" onclick="ReviewsCarousel.goToSlide(${i})" aria-label="Go to slide ${i + 1}"></button>`
+    ).join('');
+
+    return `
+      <div class="reviews-carousel-widget">
+        <div class="reviews-carousel-header">
+          <div class="reviews-summary">
+            <span class="reviews-rating-badge">
+              <span class="rating-value">${(reviewsData?.rating || 0).toFixed(1)}</span>
+              <span class="rating-stars">${renderStars(reviewsData?.rating || 0)}</span>
+              <span class="rating-count">${reviewsData?.totalReviews || reviews.length} reviews</span>
+            </span>
+          </div>
         </div>
-        <div class="g-reviews-footer">
-          <p class="g-powered-by">Reviews from Google · <a href="https://search.google.com/local/reviews?placeid=ChIJu0aCp0JjdkgRMeuCV3E3DdI" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:underline">View all on Google →</a></p>
+        <div class="carousel">
+          <div class="carousel-track-container">
+            ${slides.join('')}
+          </div>
+          ${totalSlides > 1 ? `
+            <button class="carousel-btn prev" onclick="ReviewsCarousel.prevSlide()" aria-label="Previous reviews">&#10094;</button>
+            <button class="carousel-btn next" onclick="ReviewsCarousel.nextSlide()" aria-label="Next reviews">&#10095;</button>
+            <div class="carousel-nav">
+              ${indicators}
+            </div>
+          ` : ''}
+        </div>
+        <div class="reviews-carousel-footer">
+          <a href="https://search.google.com/local/reviews?placeid=ChIJu0aCp0JjdkgRMeuCV3E3DdI" 
+             target="_blank" rel="noopener" class="reviews-view-all">
+            View all ${reviewsData?.totalReviews || reviews.length} reviews on Google →
+          </a>
         </div>
       </div>
     `;
@@ -79,6 +98,11 @@ const ReviewsWidget = (function () {
     return response.json();
   }
 
+  function filterReviews(reviews) {
+    // Only 4 and 5 star reviews
+    return reviews.filter(r => r.rating >= 4);
+  }
+
   async function render(containerId) {
     const container = document.getElementById(containerId);
     if (!container) {
@@ -87,22 +111,34 @@ const ReviewsWidget = (function () {
     }
 
     container.innerHTML = `
-      <div class="google-reviews-widget loading">
+      <div class="reviews-carousel-widget loading">
         <div class="g-loading">Loading reviews…</div>
       </div>
     `;
 
     try {
       reviewsData = await fetchReviews();
-      const displayReviews = reviewsData.reviews.slice(0, config.maxReviews || 6);
-      container.innerHTML = createWidgetHTML(displayReviews, reviewsData);
+      const filteredReviews = filterReviews(reviewsData.reviews);
+      container.innerHTML = createCarouselHTML(filteredReviews);
+      
+      // Start auto-play
+      startAutoPlay();
+      
+      // Handle resize
+      window.addEventListener('resize', debounce(() => {
+        const newSlidesPerView = getSlidesPerView();
+        if (newSlidesPerView !== SLIDES_PER_VIEW) {
+          location.reload(); // Simple approach - reload to recalculate slides
+        }
+      }, 250));
+      
     } catch (error) {
-      console.error('Reviews widget error:', error);
+      console.error('Reviews carousel error:', error);
       container.innerHTML = `
-        <div class="google-reviews-widget error">
+        <div class="reviews-carousel-widget error">
           <p class="g-error">Unable to load reviews.</p>
           <a href="https://search.google.com/local/reviews?placeid=ChIJu0aCp0JjdkgRMeuCV3E3DdI" 
-             target="_blank" rel="noopener" class="g-view-all">
+             target="_blank" rel="noopener" class="reviews-view-all">
             View reviews on Google →
           </a>
         </div>
@@ -110,13 +146,69 @@ const ReviewsWidget = (function () {
     }
   }
 
+  function startAutoPlay() {
+    stopAutoPlay();
+    if (totalSlides <= 1) return;
+    autoPlayInterval = setInterval(() => nextSlide(), 6000);
+  }
+
+  function stopAutoPlay() {
+    if (autoPlayInterval) clearInterval(autoPlayInterval);
+  }
+
+  function updateCarousel() {
+    const track = document.querySelector('.reviews-carousel-widget .carousel-track-container');
+    const slides = document.querySelectorAll('.reviews-carousel-widget .carousel-slide');
+    const indicators = document.querySelectorAll('.reviews-carousel-widget .carousel-indicator');
+    
+    if (!track || slides.length === 0) return;
+
+    const slideWidth = 100 / SLIDES_PER_VIEW;
+    track.style.transform = `translateX(-${currentSlide * slideWidth * SLIDES_PER_VIEW}%)`;
+
+    slides.forEach((slide, i) => {
+      slide.classList.toggle('current-slide', i === currentSlide);
+    });
+    indicators.forEach((ind, i) => {
+      ind.classList.toggle('active', i === currentSlide);
+    });
+  }
+
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % totalSlides;
+    updateCarousel();
+    startAutoPlay();
+  }
+
+  function prevSlide() {
+    currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+    updateCarousel();
+    startAutoPlay();
+  }
+
+  function goToSlide(index) {
+    currentSlide = index;
+    updateCarousel();
+    startAutoPlay();
+  }
+
+  function debounce(fn, delay) {
+    let timeoutId;
+    return (...args) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => fn(...args), delay);
+    };
+  }
+
   function init(options = {}) {
     config = {
       jsonUrl: 'reviews.json',
-      maxReviews: 6,
       containerId: 'reviews-widget',
       ...options
     };
+
+    // Expose globally for inline onclick handlers
+    window.ReviewsCarousel = { nextSlide, prevSlide, goToSlide };
 
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => render(config.containerId));
@@ -126,24 +218,24 @@ const ReviewsWidget = (function () {
   }
 
   function refresh(containerId) {
+    currentSlide = 0;
     render(containerId || config.containerId);
   }
 
-  return { init, refresh };
+  return { init, refresh, nextSlide, prevSlide, goToSlide };
 })();
 
 // Auto-init
 document.addEventListener('DOMContentLoaded', () => {
   const el = document.querySelector('[data-reviews-widget]');
   if (el) {
-    ReviewsWidget.init({
+    ReviewsCarousel.init({
       jsonUrl: el.dataset.jsonUrl || 'reviews.json',
-      maxReviews: parseInt(el.dataset.maxReviews) || 6,
       containerId: el.id || 'reviews-widget'
     });
   }
 });
 
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = ReviewsWidget;
+  module.exports = ReviewsCarousel;
 }
