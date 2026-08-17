@@ -722,18 +722,11 @@
           </div>
         </div>
         <hr class="div">
-        <div class="review">
-          <div class="stars">★★★★★</div>
-          <p class="review-text">"Brilliant Italian boards, a proper wine list, and staff who make you feel at home
-            straight away. Exactly what Wooburn Green needed."</p>
-          <div class="review-author">— Google Review</div>
-        </div>
-        <div class="review">
-          <div class="stars">★★★★★</div>
-          <p class="review-text">"The Spicy Bomb focaccia and a glass of Primitivo on a Friday evening — perfect. We'll
-            be back every week."</p>
-          <div class="review-author">— Google Review</div>
-        </div>
+        <!-- Google Reviews Widget -->
+        <div id="google-reviews" data-google-reviews 
+             data-place-id="YOUR_PLACE_ID_HERE" 
+             data-api-key="YOUR_API_KEY_HERE"
+             data-max-reviews="6"></div>
       </div>
     </div>
   </section>
@@ -853,6 +846,7 @@
   </div>
 
   <script src="allergen-data.js"></script>
+  <script src="google-reviews.js"></script>
   <script src="script.js"></script>
 </body>
 
