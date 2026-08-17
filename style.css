@@ -700,6 +700,77 @@ h2 em {
     color: rgba(245, 240, 232, .75);
 }
 
+/* DIETARY FILTER */
+.dietary-filter {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+    flex-wrap: wrap;
+    padding: 0.5rem 0;
+    border-top: 1px solid rgba(245, 240, 232, .08);
+    border-bottom: 1px solid rgba(245, 240, 232, .08);
+}
+
+.df-btn {
+    background: transparent;
+    border: 1px solid rgba(245, 240, 232, .15);
+    padding: 0.45rem 1rem;
+    font-family: var(--fb);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: rgba(245, 240, 232, .5);
+    transition: all 0.2s;
+    border-radius: 20px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.df-btn:hover,
+.df-btn.active {
+    background: var(--gold);
+    color: var(--ink);
+    border-color: var(--gold);
+}
+
+.df-btn:focus {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+}
+
+.food-item.hidden,
+.olives-row.hidden {
+    display: none !important;
+}
+
+.mpanel .hidden {
+    display: none !important;
+}
+
+.mpanel .food-item,
+.mpanel .olives-row {
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.mpanel .food-item:not(.hidden),
+.mpanel .olives-row:not(.hidden) {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* DIETARY TAGS on menu items */
+.dietary-tag {
+    animation: popIn 0.3s ease-out;
+}
+
+@keyframes popIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
 .mpanel {
     display: none;
     padding-top: 2rem;

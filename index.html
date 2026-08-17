@@ -241,12 +241,22 @@
   <section id="menu">
     <div class="s-label">Food &amp; Drink</div>
     <h2>The Menu</h2>
-    <div class="menu-nav">
+<div class="menu-nav">
       <button class="mtab active" onclick="mTab(this,'food')">Food</button>
       <button class="mtab" onclick="mTab(this,'beer')">Craft Beer</button>
       <button class="mtab" onclick="mTab(this,'wine-glass')">Wine by the Glass</button>
       <button class="mtab" onclick="mTab(this,'spirits')">Spirits</button>
-      <button class="mtab" onclick="mTab(this,'soft')">Soft Drinks &amp; AF</button>
+      <button class="mtab" onclick="mTab(this,'soft')">Soft Drinks & AF</button>
+    </div>
+
+    <!-- DIETARY FILTER -->
+    <div class="dietary-filter" id="dietaryFilter" style="display:none;">
+      <span style="font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,240,232,.4);margin-right:.8rem;">Filter:</span>
+      <button class="df-btn active" data-filter="all" onclick="filterDietary('all', this)">All</button>
+      <button class="df-btn" data-filter="vegetarian" onclick="filterDietary('vegetarian', this)">🥬 Vegetarian</button>
+      <button class="df-btn" data-filter="vegan" onclick="filterDietary('vegan', this)">🌱 Vegan</button>
+      <button class="df-btn" data-filter="gluten-free" onclick="filterDietary('gluten-free', this)">🌾 Gluten-Free</button>
+      <button class="df-btn" data-filter="dairy-free" onclick="filterDietary('dairy-free', this)">🥛 Dairy-Free</button>
     </div>
 
     <!-- FOOD -->
@@ -326,6 +336,9 @@
       </div>
       <p style="font-size:.7rem;color:rgba(245,240,232,.25);margin-top:2rem;font-weight:300">Order at the till · Prices
         in £</p>
+      <p style="font-size:.7rem;color:rgba(245,240,232,.4);margin-top:.8rem;font-weight:300"><a href="allergen-matrix.html"
+          style="color:var(--gold);text-decoration:underline">View full allergen matrix (14 allergens)</a> · <a
+          href="allergen-matrix.html" style="color:var(--gold);text-decoration:underline" download>Download PDF</a></p>
     </div>
 
     <!-- BEER - NUOVA SEZIONE -->
@@ -371,6 +384,8 @@
       </div>
       <p style="font-size:.7rem;color:rgba(245,240,232,.22);margin-top:1.8rem;font-weight:300">Order at the till · All
         prices in £ · Selection rotates</p>
+      <p style="font-size:.7rem;color:rgba(245,240,232,.4);margin-top:.8rem;font-weight:300"><a href="allergen-matrix.html"
+          style="color:var(--gold);text-decoration:underline">View allergen info for drinks</a></p>
     </div>
 
     <!-- WINE BY GLASS -->
@@ -669,7 +684,10 @@
                 placeholder="jane@email.com"></div>
           </div>
           <div class="fg"><label for="bookNotes">Any notes?</label><textarea id="bookNotes"
-              placeholder="Allergies, dietary requirements, special occasions…"></textarea></div>
+              placeholder="Allergies, dietary requirements, special occasions…"></textarea>
+          <p style="font-size:.65rem;color:rgba(28,22,18,.4);margin-top:.4rem;font-weight:300">Have allergies? <a
+              href="allergen-matrix.html" style="color:var(--gold);text-decoration:underline">View our allergen
+              matrix</a> and let us know when you book.</p></div>
           <button type="submit" class="btn-gold" style="width:100%;padding:.85rem;font-size:.78rem">Confirm
             Reservation</button>
           <p style="font-size:.68rem;color:var(--stone);text-align:center;font-weight:300">Or call us directly during
@@ -834,6 +852,7 @@
     <a href="#book" class="mob-book">Book a Table</a>
   </div>
 
+  <script src="allergen-data.js"></script>
   <script src="script.js"></script>
 </body>
 

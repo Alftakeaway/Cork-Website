@@ -4,6 +4,24 @@ function mTab(btn, id) {
     document.querySelectorAll('.mpanel').forEach(p => p.classList.remove('active'));
     btn.classList.add('active');
     document.getElementById(id).classList.add('active');
+
+    // Show/hide dietary filter
+    const dietaryFilter = document.getElementById('dietaryFilter');
+    if (dietaryFilter) {
+        dietaryFilter.style.display = (id === 'food') ? 'flex' : 'none';
+    }
+
+    // Reset dietary filter when switching to food
+    if (id === 'food') {
+        const allBtn = document.querySelector('.df-btn[data-filter="all"]');
+        if (allBtn && !allBtn.classList.contains('active')) {
+            filterDietary('all', allBtn);
+        }
+        // Re-render allergen indicators
+        setTimeout(() => {
+            if (window.renderAllergenIndicators) window.renderAllergenIndicators();
+        }, 50);
+    }
 }
 
 // CHEESE FILTER
@@ -15,6 +33,55 @@ function filterCheese(category, btn) {
             card.classList.remove('hidden');
         } else {
             card.classList.add('hidden');
+        }
+    });
+}
+
+// DIETARY FILTER
+function filterDietary(filter, btn) {
+    document.querySelectorAll('.df-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    document.querySelectorAll('#food .food-item, #food .olives-row').forEach(item => {
+        const nameEl = item.querySelector('.fi-name') || item.querySelector('.olives-name');
+        if (!nameEl) return;
+
+        const dishName = nameEl.textContent.trim();
+        const dietary = getDietaryFlags(dishName);
+        const allergens = getAllergensForDish(dishName);
+
+        let show = true;
+
+        switch (filter) {
+            case 'vegetarian':
+                show = dietary.vegetarian;
+                break;
+            case 'vegan':
+                show = dietary.vegan;
+                break;
+            case 'gluten-free':
+                show = !allergens.contains.includes('gluten');
+                break;
+            case 'dairy-free':
+                show = !allergens.contains.includes('milk');
+                break;
+            default:
+                show = true;
+        }
+
+        if (show) {
+            item.classList.remove('hidden');
+        } else {
+            item.classList.add('hidden');
+        }
+    });
+
+    // Also handle empty sections
+    document.querySelectorAll('#food .food-grid > div').forEach(section => {
+        const visibleItems = section.querySelectorAll('.food-item:not(.hidden), .olives-row:not(.hidden)');
+        const sectionTitle = section.querySelector('.food-section-title, .olives-section');
+        if (sectionTitle) {
+            sectionTitle.style.display = visibleItems.length > 0 ? '' : 'none';
         }
     });
 }
@@ -297,4 +364,233 @@ function handleNewsletter(event) {
         // 4. Attacca il banner alla pagina
         document.body.appendChild(banner);
     }
+})();
+
+// ALLERGEN INDICATORS ON MENU
+(function () {
+    // Allergen display order (UK FSA recommended)
+    const ALLERGEN_ORDER = [
+        'celery', 'gluten', 'crustaceans', 'eggs', 'fish',
+        'lupin', 'milk', 'molluscs', 'mustard', 'nuts',
+        'peanuts', 'sesame', 'soy', 'sulphites'
+    ];
+
+    // Allergen icons
+    const ALLERGEN_ICONS = {
+        celery: '🥬', gluten: '🌾', crustaceans: '🦐', eggs: '🥚', fish: '🐟',
+        lupin: '🌱', milk: '🥛', molluscs: '🐚', mustard: '🌰', nuts: '🥜',
+        peanuts: '🥜', sesame: '🌰', soy: '🫘', sulphites: '🍷'
+    };
+
+    // Allergen short codes
+    const ALLERGEN_CODES = {
+        celery: 'CEL', gluten: 'GLU', crustaceans: 'CRU', eggs: 'EGG', fish: 'FSH',
+        lupin: 'LUP', milk: 'MLK', molluscs: 'MOL', mustard: 'MUS', nuts: 'NUT',
+        peanuts: 'PNT', sesame: 'SES', soy: 'SOY', sulphites: 'SUL'
+    };
+
+    // Dietary icons
+    const DIETARY_ICONS = {
+        vegetarian: '🥬',
+        vegan: '🌱'
+    };
+
+    // Get allergen data from allergen-data.js (loaded globally)
+    function getAllergensForDish(dishName) {
+        if (typeof ALLERGEN_MATRIX !== 'undefined' && ALLERGEN_MATRIX[dishName]) {
+            const matrix = ALLERGEN_MATRIX[dishName];
+            const contains = [];
+            const mayContain = [];
+            Object.entries(matrix).forEach(([key, value]) => {
+                if (value === true) contains.push(key);
+                else if (value === 'may') mayContain.push(key);
+            });
+            return { contains, mayContain };
+        }
+        return { contains: [], mayContain: [] };
+    }
+
+    function getDietaryFlags(dishName) {
+        if (typeof DIETARY_FLAGS !== 'undefined' && DIETARY_FLAGS[dishName]) {
+            return DIETARY_FLAGS[dishName];
+        }
+        return { vegetarian: false, vegan: false };
+    }
+
+    function renderAllergenIndicators() {
+        document.querySelectorAll('.food-item').forEach(item => {
+            const nameEl = item.querySelector('.fi-name');
+            if (!nameEl) return;
+
+            const dishName = nameEl.textContent.trim();
+            const { contains, mayContain } = getAllergensForDish(dishName);
+            const dietary = getDietaryFlags(dishName);
+
+            // Check if already rendered
+            if (item.querySelector('.fi-allergens')) return;
+
+            const allergenDiv = document.createElement('div');
+            allergenDiv.className = 'fi-allergens';
+            allergenDiv.style.cssText = 'display:flex; flex-wrap:wrap; gap:0.35rem; margin-top:0.5rem; font-size:0.7rem; align-items:center;';
+
+            // Dietary badges first (vegetarian/vegan)
+            if (dietary.vegetarian || dietary.vegan) {
+                const dietaryFlags = [
+                    { key: 'vegetarian', icon: DIETARY_ICONS.vegetarian, label: 'Vegetarian', short: 'V' },
+                    { key: 'vegan', icon: DIETARY_ICONS.vegan, label: 'Vegan', short: 'VE' }
+                ];
+                dietaryFlags.forEach(d => {
+                    if (dietary[d.key]) {
+                        const span = document.createElement('span');
+                        span.className = 'dietary-tag';
+                        span.style.cssText = `
+                            display:inline-flex; align-items:center; gap:0.2rem;
+                            padding:0.15rem 0.5rem; border-radius:20px;
+                            background:rgba(42,61,46,0.1);
+                            border:1px solid var(--bottle);
+                            color:var(--bottle);
+                            font-weight:500; font-size:0.6rem; letter-spacing:0.05em;
+                            text-transform:uppercase; cursor:help;
+                        `;
+                        span.innerHTML = `
+                            <span style="font-size:0.75rem;">${d.icon}</span>
+                            <span>${d.short}</span>
+                        `;
+                        span.title = d.label;
+                        allergenDiv.appendChild(span);
+                    }
+                });
+            }
+
+            const allAllergens = [...contains, ...mayContain];
+            const uniqueAllergens = [...new Set(allAllergens)];
+
+            uniqueAllergens.forEach(key => {
+                const isMayContain = mayContain.includes(key) && !contains.includes(key);
+                const span = document.createElement('span');
+                span.className = 'allergen-tag' + (isMayContain ? ' may-contain' : '');
+                span.style.cssText = `
+                    display:inline-flex; align-items:center; gap:0.2rem;
+                    padding:0.15rem 0.5rem; border-radius:20px;
+                    background:${isMayContain ? 'rgba(139,78,42,0.1)' : 'rgba(28,22,18,0.06)'};
+                    border:1px solid ${isMayContain ? 'var(--clay)' : 'var(--bw)'};
+                    color:${isMayContain ? 'var(--clay)' : 'var(--stone)'};
+                    font-weight:500; font-size:0.6rem; letter-spacing:0.05em;
+                    text-transform:uppercase; cursor:help;
+                `;
+                span.innerHTML = `
+                    <span style="font-size:0.75rem;">${ALLERGEN_ICONS[key]}</span>
+                    <span>${ALLERGEN_CODES[key]}</span>
+                    ${isMayContain ? '<span style="font-size:0.55rem;opacity:0.7;">?</span>' : ''}
+                `;
+                span.title = (isMayContain ? 'May contain traces of ' : 'Contains ') + (ALLERGEN_ICONS[key] + ' ' + key.charAt(0).toUpperCase() + key.slice(1));
+                allergenDiv.appendChild(span);
+            });
+
+            // Add link to full matrix
+            const linkSpan = document.createElement('a');
+            linkSpan.href = 'allergen-matrix.html';
+            linkSpan.style.cssText = 'font-size:0.6rem; color:var(--gold); text-decoration:underline; margin-left:0.5rem; align-self:center;';
+            linkSpan.textContent = 'Full matrix →';
+            allergenDiv.appendChild(linkSpan);
+
+            // Insert after fi-desc or fi-note
+            const descEl = item.querySelector('.fi-desc') || item.querySelector('.fi-note');
+            if (descEl) {
+                descEl.insertAdjacentElement('afterend', allergenDiv);
+            } else {
+                item.appendChild(allergenDiv);
+            }
+        });
+
+        // Also handle olives rows
+        document.querySelectorAll('.olives-row').forEach(row => {
+            const nameEl = row.querySelector('.olives-name');
+            if (!nameEl) return;
+
+            const dishName = nameEl.textContent.trim();
+            const { contains, mayContain } = getAllergensForDish(dishName);
+            const dietary = getDietaryFlags(dishName);
+
+            if (row.querySelector('.fi-allergens')) return;
+
+            const allergenDiv = document.createElement('div');
+            allergenDiv.className = 'fi-allergens';
+            allergenDiv.style.cssText = 'display:flex; flex-wrap:wrap; gap:0.25rem; margin-top:0.25rem; font-size:0.65rem; align-items:center;';
+
+            // Dietary badges for olives (all vegan)
+            if (dietary.vegetarian || dietary.vegan) {
+                const dietaryFlags = [
+                    { key: 'vegetarian', icon: DIETARY_ICONS.vegetarian, label: 'Vegetarian', short: 'V' },
+                    { key: 'vegan', icon: DIETARY_ICONS.vegan, label: 'Vegan', short: 'VE' }
+                ];
+                dietaryFlags.forEach(d => {
+                    if (dietary[d.key]) {
+                        const span = document.createElement('span');
+                        span.className = 'dietary-tag';
+                        span.style.cssText = `
+                            display:inline-flex; align-items:center; gap:0.15rem;
+                            padding:0.1rem 0.4rem; border-radius:12px;
+                            background:rgba(42,61,46,0.1);
+                            border:1px solid var(--bottle);
+                            color:var(--bottle);
+                            font-weight:500; font-size:0.55rem; letter-spacing:0.05em;
+                            text-transform:uppercase; cursor:help;
+                        `;
+                        span.innerHTML = `
+                            <span style="font-size:0.7rem;">${d.icon}</span>
+                            <span>${d.short}</span>
+                        `;
+                        span.title = d.label;
+                        allergenDiv.appendChild(span);
+                    }
+                });
+            }
+
+            const allAllergens = [...contains, ...mayContain];
+            const uniqueAllergens = [...new Set(allAllergens)];
+
+            uniqueAllergens.forEach(key => {
+                const isMayContain = mayContain.includes(key) && !contains.includes(key);
+                const span = document.createElement('span');
+                span.className = 'allergen-tag' + (isMayContain ? ' may-contain' : '');
+                span.style.cssText = `
+                    display:inline-flex; align-items:center; gap:0.15rem;
+                    padding:0.1rem 0.4rem; border-radius:12px;
+                    background:${isMayContain ? 'rgba(139,78,42,0.1)' : 'rgba(28,22,18,0.06)'};
+                    border:1px solid ${isMayContain ? 'var(--clay)' : 'var(--bw)'};
+                    color:${isMayContain ? 'var(--clay)' : 'var(--stone)'};
+                    font-weight:500; font-size:0.55rem; letter-spacing:0.05em;
+                    text-transform:uppercase; cursor:help;
+                `;
+                span.innerHTML = `
+                    <span style="font-size:0.7rem;">${ALLERGEN_ICONS[key]}</span>
+                    <span>${ALLERGEN_CODES[key]}</span>
+                `;
+                span.title = (isMayContain ? 'May contain traces of ' : 'Contains ') + key;
+                allergenDiv.appendChild(span);
+            });
+
+            row.appendChild(allergenDiv);
+        });
+    }
+
+    // Run when DOM ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', renderAllergenIndicators);
+    } else {
+        renderAllergenIndicators();
+    }
+
+    // Expose globally for mTab to call
+    window.renderAllergenIndicators = renderAllergenIndicators;
+
+    // Also re-run when menu tabs change (food panel becomes active)
+    const originalMTab = window.mTab;
+    window.mTab = function(btn, id) {
+        originalMTab(btn, id);
+        if (id === 'food') {
+            setTimeout(renderAllergenIndicators, 50);
+        }
+    };
 })();

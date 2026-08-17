@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Allergen Matrix · Cork Wine Bar Bistro</title>
+  <meta name="description"
+    content="Complete allergen information for all dishes at Cork Wine Bar Bistro. UK 14 major allergens listed per menu item.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      padding-top: 100px;
+      padding-bottom: 4rem;
+    }
+
+    .allergen-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 6%;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      font-weight: 500;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    .page-header {
+      margin-bottom: 3rem;
+    }
+
+    .page-header h1 {
+      font-family: var(--fd);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 300;
+      margin-bottom: 1rem;
+    }
+
+    .page-header p {
+      color: var(--stone);
+      font-size: 1rem;
+      line-height: 1.8;
+      font-weight: 300;
+      max-width: 700px;
+    }
+
+    .disclaimer {
+      background: rgba(139, 78, 42, 0.08);
+      border: 1px solid rgba(139, 78, 42, 0.2);
+      border-radius: 3px;
+      padding: 1.5rem;
+      margin-bottom: 2.5rem;
+      font-size: 0.85rem;
+      line-height: 1.7;
+      color: var(--ink);
+    }
+
+    .disclaimer strong {
+      color: var(--clay);
+    }
+
+    .legend-section {
+      margin-bottom: 3rem;
+    }
+
+    .legend-section h2 {
+      font-family: var(--fd);
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 1.5rem;
+    }
+
+    .allergen-legend {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.75rem 1rem;
+      background: var(--warm);
+      border: 1px solid var(--bw);
+      border-radius: 3px;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+    }
+
+    .legend-item:hover {
+      border-color: var(--gold);
+      background: rgba(184, 147, 58, 0.05);
+    }
+
+    .legend-icon {
+      font-size: 1.2rem;
+      width: 28px;
+      text-align: center;
+    }
+
+    .legend-code {
+      font-family: var(--fb);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      background: rgba(184, 147, 58, 0.1);
+      padding: 0.15rem 0.5rem;
+      border-radius: 2px;
+      margin-left: auto;
+    }
+
+    .matrix-section {
+      margin-bottom: 3rem;
+    }
+
+    .matrix-section h2 {
+      font-family: var(--fd);
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 1.5rem;
+      color: var(--ink);
+    }
+
+    .matrix-table-wrapper {
+      overflow-x: auto;
+      border: 1px solid var(--bw);
+      border-radius: 3px;
+    }
+
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      min-width: 800px;
+    }
+
+    .matrix-table th,
+    .matrix-table td {
+      padding: 0.75rem 0.5rem;
+      text-align: center;
+      border-bottom: 1px solid var(--bw);
+      border-right: 1px solid var(--bw);
+    }
+
+    .matrix-table th:last-child,
+    .matrix-table td:last-child {
+      border-right: none;
+    }
+
+    .matrix-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .matrix-table th {
+      background: var(--ink);
+      color: var(--cream);
+      font-family: var(--fb);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 500;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .matrix-table th.dish-col {
+      text-align: left;
+      min-width: 200px;
+      width: 200px;
+      background: var(--ink);
+    }
+
+    .matrix-table td.dish-name {
+      text-align: left;
+      font-weight: 400;
+      color: var(--ink);
+      font-family: var(--fd);
+      font-size: 0.9rem;
+      background: var(--warm);
+      position: sticky;
+      left: 0;
+      z-index: 2;
+      border-right: 2px solid var(--gold);
+    }
+
+    .matrix-table tr:nth-child(even) td.dish-name {
+      background: #faf7f3;
+    }
+
+    .matrix-table tr:hover td.dish-name {
+      background: rgba(184, 147, 58, 0.1);
+    }
+
+    .allergen-cell {
+      position: relative;
+      width: 44px;
+      height: 44px;
+    }
+
+    .allergen-icon {
+      font-size: 1.3rem;
+      opacity: 0.15;
+      transition: opacity 0.2s;
+    }
+
+    .allergen-cell.contains .allergen-icon {
+      opacity: 1;
+    }
+
+    .allergen-cell.may-contain .allergen-icon {
+      opacity: 0.5;
+    }
+
+    .allergen-cell.may-contain .allergen-icon::after {
+      content: '?';
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      font-size: 0.6rem;
+      color: var(--clay);
+      background: var(--cream);
+      border-radius: 50%;
+      width: 14px;
+      height: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--clay);
+    }
+
+    .allergen-tooltip {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--ink);
+      color: var(--cream);
+      padding: 0.5rem 0.75rem;
+      border-radius: 3px;
+      font-size: 0.7rem;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s;
+      pointer-events: none;
+      z-index: 10;
+      margin-bottom: 0.5rem;
+    }
+
+    .allergen-cell:hover .allergen-tooltip {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .allergen-tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: var(--ink);
+    }
+
+    .actions-bar {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--bw);
+      flex-wrap: wrap;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--ink);
+      border: 1px solid var(--ink);
+      padding: 0.85rem 1.8rem;
+      font-family: var(--fb);
+      font-size: 0.76rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-secondary:hover {
+      background: var(--ink);
+      color: var(--cream);
+    }
+
+    @media (max-width: 768px) {
+      .matrix-table {
+        font-size: 0.7rem;
+        min-width: 600px;
+      }
+
+      .matrix-table th,
+      .matrix-table td {
+        padding: 0.5rem 0.3rem;
+      }
+
+      .allergen-cell {
+        width: 36px;
+        height: 36px;
+      }
+
+      .allergen-icon {
+        font-size: 1.1rem;
+      }
+
+      .legend-item {
+        font-size: 0.75rem;
+        padding: 0.6rem 0.8rem;
+      }
+    }
+
+    @media print {
+      .back-link,
+      .actions-bar {
+        display: none;
+      }
+
+      body {
+        padding-top: 0;
+      }
+
+.matrix-table th.dish-col,
+    .matrix-table td.dish-name {
+      position: static;
+    }
+
+    .dietary-col {
+      width: 56px !important;
+      min-width: 56px !important;
+    }
+
+    .dietary-cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    .dietary-cell.yes { color: #2A3D2E; }
+    .dietary-cell.no { color: rgba(28, 22, 18, 0.25); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <a href="index.html" class="logo">CORK<em>·</em></a>
+    <a href="index.html" class="nav-book" style="margin-left:auto;">Back to Site</a>
+  </nav>
+
+  <div class="allergen-container">
+    <a href="index.html#menu" class="back-link">← Back to Menu</a>
+
+    <header class="page-header">
+      <h1>Allergen <em>Matrix</em></h1>
+      <p>Below you'll find the 14 major allergens as defined by UK food law (Natasha's Law) for every dish on our menu.
+        We take allergies seriously — please always inform your server of any allergies or intolerances when ordering,
+        as recipes and suppliers may change.</p>
+    </header>
+
+    <div class="disclaimer">
+      <strong>⚠ Important:</strong> This matrix is a guide based on our standard recipes. We handle all 14 allergens in
+      our kitchen and cannot guarantee total absence of cross-contamination. Dishes marked "may contain" indicate
+      potential trace presence from shared equipment or supplier declarations. Always speak to our team about your
+      specific needs — we're happy to talk through ingredients in detail.
+    </div>
+
+    <!-- LEGEND -->
+    <section class="legend-section">
+      <h2>Allergen Key</h2>
+      <div class="allergen-legend" id="allergenLegend"></div>
+    </section>
+
+    <!-- TAGLIERI MATRIX -->
+    <section class="matrix-section">
+      <h2>Taglieri & Starters</h2>
+      <div class="matrix-table-wrapper">
+        <table class="matrix-table" id="taglieriMatrix">
+          <thead>
+            <tr>
+              <th class="dish-col">Dish</th>
+              <!-- Allergen headers populated by JS -->
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- FOCACCE MATRIX -->
+    <section class="matrix-section">
+      <h2>Focacce</h2>
+      <div class="matrix-table-wrapper">
+        <table class="matrix-table" id="focacceMatrix">
+          <thead>
+            <tr>
+              <th class="dish-col">Dish</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- OLIVES MATRIX -->
+    <section class="matrix-section">
+      <h2>Olives</h2>
+      <div class="matrix-table-wrapper">
+        <table class="matrix-table" id="olivesMatrix">
+          <thead>
+            <tr>
+              <th class="dish-col">Dish</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- DRINKS NOTE -->
+    <section class="matrix-section">
+      <h2>Drinks</h2>
+      <div style="color: var(--stone); font-size: 0.9rem; line-height: 1.8; max-width: 700px;">
+        <p><strong>Wine:</strong> Contains <span style="color: var(--gold);">sulphites</span> (naturally occurring and
+          added as preservative). Some wines may use egg, milk, or fish derivatives in fining — ask for vegan options.
+        </p>
+        <p><strong>Beer:</strong> Contains <span style="color: var(--gold);">gluten</span> (barley/wheat). Gluten-free
+          options available — ask our team.</p>
+        <p><strong>Spirits & Liqueurs:</strong> Generally allergen-free, but some liqueurs contain <span
+            style="color: var(--gold);">milk</span> (Bailey's), <span style="color: var(--gold);">nuts</span> (Amaretto,
+          Frangelico), or <span style="color: var(--gold);">gluten</span> (grain-based spirits). Ask for specifics.
+        </p>
+        <p><strong>Soft drinks:</strong> Allergen-free.</p>
+      </div>
+    </section>
+
+    <div class="actions-bar">
+      <button class="btn-secondary" onclick="downloadPDF()" id="pdfBtn">
+        📄 Download PDF
+      </button>
+      <a href="index.html#book" class="btn-secondary">
+        Book a Table →
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="f-logo">CORK<em>·</em></div>
+    <div class="f-links">
+      <a href="https://instagram.com/corkwinebarbistro" target="_blank">Instagram</a>
+      <a href="https://facebook.com" target="_blank">Facebook</a>
+      <a href="#private">Private Events</a>
+    </div>
+    <div class="f-copy">© 2026 Cork Wine Bar Bistro · Wooburn Green HP10 0EU</div>
+    <div class="f-links">
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="https://instagram.com/corkwinebarbistro" target="_blank">Instagram</a>
+    </div>
+  </footer>
+
+  <script src="allergen-data.js"></script>
+  <script>
+    // Allergen display order (matches UK FSA recommended order)
+    const ALLERGEN_ORDER = [
+      'celery', 'gluten', 'crustaceans', 'eggs', 'fish',
+      'lupin', 'milk', 'molluscs', 'mustard', 'nuts',
+      'peanuts', 'sesame', 'soy', 'sulphites'
+    ];
+
+    // Section definitions
+    const SECTIONS = {
+      taglieri: {
+        title: 'Taglieri & Starters',
+        dishes: [
+          'Tagliere salumi',
+          'Tagliere formaggi',
+          'Tagliere misto',
+          'Pane e burro',
+          'Salame e pane'
+        ],
+        containerId: 'taglieriMatrix'
+      },
+      focacce: {
+        title: 'Focacce',
+        dishes: [
+          'Siciliano',
+          'Bella Italia',
+          'Süd Tirol',
+          'Firenze',
+          'Abruzzese',
+          'Pugliese',
+          'Fat Pig',
+          'Spicy Bomb'
+        ],
+        containerId: 'focacceMatrix'
+      },
+      olives: {
+        title: 'Olives',
+        dishes: [
+          'Nocellara',
+          'Garlic & herbs',
+          'Silvergreen (piri-piri)',
+          'Silvergreen (stuffed with garlic)'
+        ],
+        containerId: 'olivesMatrix'
+      }
+    };
+
+    // Build legend
+    function buildLegend() {
+      const legendContainer = document.getElementById('allergenLegend');
+      ALLERGEN_ORDER.forEach(key => {
+        const a = ALLERGENS[key];
+        const item = document.createElement('div');
+        item.className = 'legend-item';
+        item.innerHTML = `
+          <span class="legend-icon">${a.icon}</span>
+          <span>${a.label}</span>
+          <span class="legend-code">${a.short}</span>
+        `;
+        legendContainer.appendChild(item);
+      });
+    }
+
+    // Build matrix table headers
+    function buildHeaders(tableId) {
+      const thead = document.querySelector(`#${tableId} thead tr`);
+      ALLERGEN_ORDER.forEach(key => {
+        const a = ALLERGENS[key];
+        const th = document.createElement('th');
+        th.innerHTML = `
+          <span class="allergen-tooltip">${a.label}</span>
+          <span class="legend-icon" style="opacity:1">${a.icon}</span>
+          <br><span class="legend-code">${a.short}</span>
+        `;
+        th.style.width = '44px';
+        thead.appendChild(th);
+      });
+      // Add dietary columns
+      const dietaryHeaders = [
+        { key: 'vegetarian', icon: '🥬', label: 'Vegetarian', short: 'VEG' },
+        { key: 'vegan', icon: '🌱', label: 'Vegan', short: 'VGN' }
+      ];
+      dietaryHeaders.forEach(d => {
+        const th = document.createElement('th');
+        th.className = 'dietary-col';
+        th.innerHTML = `
+          <span class="allergen-tooltip">${d.label}</span>
+          <span class="legend-icon" style="opacity:1">${d.icon}</span>
+          <br><span class="legend-code">${d.short}</span>
+        `;
+        thead.appendChild(th);
+      });
+    }
+
+    // Build matrix rows
+    function buildMatrix(section) {
+      const tbody = document.querySelector(`#${section.containerId} tbody`);
+      section.dishes.forEach(dishName => {
+        const { contains, mayContain } = getAllergensForDish(dishName);
+        const dietary = getDietaryFlags(dishName);
+        const tr = document.createElement('tr');
+
+        // Dish name cell
+        const tdName = document.createElement('td');
+        tdName.className = 'dish-name';
+        tdName.textContent = dishName;
+        tr.appendChild(tdName);
+
+        // Allergen cells
+        ALLERGEN_ORDER.forEach(key => {
+          const td = document.createElement('td');
+          td.className = 'allergen-cell';
+
+          let cellClass = '';
+          if (contains.includes(key)) cellClass = 'contains';
+          else if (mayContain.includes(key)) cellClass = 'may-contain';
+
+          const allergen = ALLERGENS[key];
+          td.innerHTML = `
+            <span class="allergen-icon ${cellClass}">${allergen.icon}</span>
+            <span class="allergen-tooltip">${allergen.label}${cellClass === 'may-contain' ? ' (may contain traces)' : ''}</span>
+          `;
+          tr.appendChild(td);
+        });
+
+        // Dietary cells
+        const dietaryFlags = [
+          { key: 'vegetarian', icon: '✓', label: 'Vegetarian' },
+          { key: 'vegan', icon: '✓', label: 'Vegan' }
+        ];
+        dietaryFlags.forEach(d => {
+          const td = document.createElement('td');
+          td.className = 'allergen-cell dietary-cell';
+          const isYes = dietary[d.key];
+          td.innerHTML = `
+            <span class="${isYes ? 'yes' : 'no'}">${isYes ? d.icon : '✗'}</span>
+            <span class="allergen-tooltip">${d.label}: ${isYes ? 'Yes' : 'No'}</span>
+          `;
+          tr.appendChild(td);
+        });
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    // PDF Download using browser print
+    function downloadPDF() {
+      const btn = document.getElementById('pdfBtn');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '⏳ Preparing...';
+      btn.disabled = true;
+
+      // Add print-specific class
+      document.body.classList.add('printing');
+
+      // Small delay to let CSS apply
+      setTimeout(() => {
+        window.print();
+        document.body.classList.remove('printing');
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }, 100);
+    }
+
+    // Init
+    buildLegend();
+    Object.values(SECTIONS).forEach(section => {
+      buildHeaders(section.containerId);
+      buildMatrix(section);
+    });
+  </script>
+</body>
+
+</html>
