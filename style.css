@@ -2039,3 +2039,77 @@ footer {
         padding: 1.5rem 5%;
     }
 }
+
+/* === PRINT === */
+@media print {
+    body {
+        background: white;
+        padding-top: 0;
+    }
+
+    nav,
+    .mob-bar,
+    footer,
+    .rv-footer,
+    .rv-dots,
+    .rv-btn,
+    .no-print,
+    #cookieBanner,
+    .open-status {
+        display: none !important;
+    }
+
+    .mpanel {
+        display: block !important;
+    }
+
+    .menu-nav,
+    .dietary-filter {
+        display: none !important;
+    }
+
+    h1,
+    h2,
+    h3,
+    .s-label,
+    .food-section-title,
+    .fi-head,
+    .fi-name,
+    .fi-price,
+    .fi-desc,
+    .fi-note,
+    .olives-title,
+    .olives-name,
+    .beer-name,
+    .beer-abv,
+    .beer-price,
+    .beer-style,
+    .wcol-title,
+    .wname,
+    .wprices,
+    .sg-title,
+    .sg-name,
+    .sg-price,
+    .grappa-cat,
+    .food-item,
+    .food-grid,
+    .wine-cols,
+    .wine-rows,
+    .spirits-grid,
+    .beer-grid,
+    .mpanel p {
+        color: #1C1612;
+        background: white;
+    }
+
+    .wine-cols,
+    .spirits-grid,
+    .food-grid,
+    .beer-grid {
+        break-inside: avoid;
+    }
+
+    .mpanel {
+        break-before: page;
+    }
+}

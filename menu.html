@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu · Cork Wine Bar Bistro · Wooburn Green</title>
+  <meta name="description"
+    content="Explore the full menu at Cork Wine Bar Bistro in Wooburn Green: Italian taglieri, artisanal focacce, 25+ cheeses, craft beer on tap, wines by the glass, spirits and soft drinks. Allergen info available.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="style.css">
+  <link rel="canonical" href="menu.html">
+  <style>
+    body {
+      padding-top: 90px;
+      background: var(--ink);
+    }
+
+    body.menu-page .mpanel {
+      display: block;
+    }
+
+    .menu-page-hero {
+      text-align: center;
+      padding: 3.5rem 6% 1rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .menu-page-hero p {
+      color: var(--stone);
+      font-weight: 300;
+      max-width: 560px;
+      margin: 1rem auto 0;
+      line-height: 1.7;
+    }
+
+    .menu-page-hero .s-label {
+      justify-content: center;
+    }
+
+    .menu-page-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 6% 3rem;
+    }
+
+    .menu-page-section h3 {
+      font-family: var(--fd);
+      font-size: 1.6rem;
+      font-weight: 300;
+      color: var(--cream);
+      margin: 3rem 0 0;
+      border-bottom: 1px solid rgba(245, 240, 232, .1);
+      padding-bottom: .8rem;
+    }
+
+    @media print {
+      body {
+        background: white;
+        padding-top: 0;
+      }
+
+      nav,
+      .mob-bar,
+      footer,
+      .rv-footer,
+      .no-print {
+        display: none !important;
+      }
+
+      .menu-page-hero h1 {
+        color: #1C1612;
+      }
+
+      .menu-page-section h3 {
+        color: #1C1612;
+        border-bottom-color: #ddd;
+      }
+
+      .mpanel {
+        display: block !important;
+      }
+
+      .food-section-title,
+      .wcol-title,
+      .sg-title,
+      .wine-rows .wname,
+      .sg-item,
+      .food-item {
+        color: #1C1612;
+      }
+
+      .fi-price,
+      .sg-price,
+      .wprices {
+        color: #1C1612;
+      }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Menu",
+    "name": "Cork Wine Bar Bistro Menu",
+    "inLanguage": "en-GB",
+    "hasMenuSection": [
+      {
+        "@type": "MenuSection",
+        "name": "Food",
+        "hasMenuItem": [
+          { "@type": "MenuItem", "name": "Tagliere salumi", "offers": { "@type": "Offer", "price": "20", "priceCurrency": "GBP" } },
+          { "@type": "MenuItem", "name": "Tagliere formaggi", "offers": { "@type": "Offer", "price": "20", "priceCurrency": "GBP" } },
+          { "@type": "MenuItem", "name": "Tagliere misto", "offers": { "@type": "Offer", "price": "25", "priceCurrency": "GBP" } }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body class="menu-page">
+
+  <nav>
+    <a href="index.html#hero" class="logo">CORK<em>·</em></a>
+    <button id="menuToggle" class="hamburger" aria-label="Toggle menu">☰</button>
+    <ul class="nav-links">
+      <li><a href="index.html#about">Our Story</a></li>
+      <li><a href="index.html#cheese">Cheese</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="index.html#events">Events</a></li>
+      <li><a href="index.html#book">Book</a></li>
+      <li><a href="index.html#find">Find Us</a></li>
+    </ul>
+    <span id="openStatus" class="open-status"><span class="status-dot"></span><span
+        id="statusText">Checking...</span></span>
+    <a href="index.html#book" class="nav-book">Reserve a Table</a>
+  </nav>
+
+  <div class="menu-page-hero">
+    <div class="s-label">Food &amp; Drink</div>
+    <h1 style="font-family:var(--fd);font-weight:300;font-size:2.6rem;color:var(--cream);margin-top:.5rem">The <em
+        style="color:var(--gold)">Menu</em></h1>
+    <p>Taglieri, artisanal focacce, 25+ cheeses, craft beer and a cellar of carefully chosen wines — on the green in
+      Wooburn Green.</p>
+    <p class="no-print" style="font-size:.75rem;margin-top:1.2rem"><a href="index.html#book" class="btn-gold"
+        style="display:inline-block">Book a Table</a></p>
+  </div>
+
+  <div class="menu-page-section">
+
+    <!-- FOOD -->
+    <div id="food" class="mpanel">
+      <h3>Food</h3>
+      <div class="food-grid">
+        <div>
+          <div class="food-section-title">Taglieri</div>
+          <div class="food-item">
+            <div class="fi-head"><span class="fi-name">Tagliere salumi</span><span class="fi-price">20 / 30</span></div>
+            <div class="fi-desc">Fine selection of freshly sliced cured meat from all over Italy, served with sourdough
+              bread</div>
+          </div>
+          <div class="food-item">
+            <div class="fi-head"><span class="fi-name">Tagliere formaggi</span><span class="fi-price">20 / 30</span>
+            </div>
+            <div class="fi-desc">Fine selection of 25+ artisanal cheeses, served with jam selection and sourdough bread
+            </div>
+            <div class="fi-note">See our cheese board for the full selection</div>
+          </div>
+          <div class="food-item">
+            <div class="fi-head"><span class="fi-name">Tagliere misto</span><span class="fi-price">25 / 35</span></div>
+            <div class="fi-desc">Fine selection of freshly sliced meat, cheeses served with jam selection and sourdough
+              bread</div>
+          </div>
+          <div class="food-item">
+            <div class="fi-head"><span class="fi-name">Pane e burro</span><span class="fi-price">6</span></div>
+            <div class="fi-desc">Premium butter with sourdough bread</div>
+          </div>
+          <div class="food-item">
+            <div class="fi-head"><span class="fi-name">Salame e pane</span><span class="fi-price">15</span></div>
+            <div class="fi-desc">Special Italian Felino salami from Parma with sourdough bread</div>
+            <div class="fi-note">+ Add fresh grilled vegetables (aubergine / courgette / peppers) +5</div>
+          </div>
+          <div class="olives-section">
+            <div class="olives-title">Olives <span class="til">£5</span></div>
+            <div class="olives-row"><span class="olives-name">Nocellara</span></div>
+            <div class="olives-row"><span class="olives-name">Garlic &amp; herbs</span></div>
+            <div class="olives-row"><span class="olives-name">Silvergreen (piri-piri)</span></div>
+            <div class="olives-row"><span class="olives-name">Silvergreen (stuffed with garlic)</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="food-section-title">Focacce</div>
+          <div class="food-item">
+            <div class="fi-head"><span class="fi-name">Siciliano</span><span class="fi-price">10</span></div>
+            <div class="fi-desc">Anchovies, yellow cherry tomato, black olive pâté, origano &amp; rocket</div>
+          </div>
+          <div class="food-item">
+            <div class="fi-head"><span class="fi-name">Bella Italia</span><span class="fi-price">10</span></div>
+            <div class="fi-desc">Roasted cotto ham, fresh tomato, buffalo mozzarella &amp; rocket</div>
+          </div>
+          <div class="food-item">
+            <div class="fi-head"><span class="fi-name">Süd Tirol</span><span class="fi-price">12</span></div>
+            <div class="fi-desc">Smoked Speck, creamy gorgonzola, rocket</div>
+          </div>
+          <div class="food-item">
+            <div class="fi-head"><span class="fi-name">Firenze</span><span class="fi-price">12</span></div>
+            <div class="fi-desc">Finocchiona salami, melted toma, artichoke cream &amp; rocket</div>
+          </div>
+          <div class="food-item">
+            <div class="fi-head"><span class="fi-name">Abruzzese</span><span class="fi-price">13</span></div>
+            <div class="fi-desc">Porchetta di Ariccia, taleggio, caramelised onions and rocket</div>
+          </div>
+          <div class="food-item">
+            <div class="fi-head"><span class="fi-name">Pugliese</span><span class="fi-price">13</span></div>
+            <div class="fi-desc">Coppa, stracciatella, yellow cherry tomato &amp; rocket</div>
+          </div>
+          <div class="food-item">
+            <div class="fi-head"><span class="fi-name">Fat Pig</span><span class="fi-price">13</span></div>
+            <div class="fi-desc">Pancetta arrotolata, salame napoli, stracciatella and rocket</div>
+          </div>
+          <div class="food-item">
+            <div class="fi-head"><span class="fi-name">Spicy Bomb</span><span class="fi-price">12</span></div>
+            <div class="fi-desc">Spianata piccante, 'nduja, melted toma and rocket</div>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:.7rem;color:rgba(245,240,232,.25);margin-top:2rem;font-weight:300">Order at the till · Prices
+        in £</p>
+      <p class="no-print" style="font-size:.7rem;color:rgba(245,240,232,.4);margin-top:.8rem;font-weight:300"><a
+          href="allergen-matrix.html" style="color:var(--gold);text-decoration:underline">View full allergen matrix (14
+          allergens)</a></p>
+    </div>
+
+    <!-- BEER -->
+    <div id="beer" class="mpanel">
+      <h3>Craft Beer on Tap</h3>
+      <div class="beer-grid">
+        <div class="beer-card">
+          <div class="beer-style">Pale Ale</div>
+          <div class="beer-name">BrewDog Punk IPA</div>
+          <div class="beer-abv">5.6% ABV · Light, tropical, hoppy</div>
+          <div class="beer-price" style="margin-top:0.5rem">£5.50 / pint</div>
+        </div>
+        <div class="beer-card">
+          <div class="beer-style">Stout</div>
+          <div class="beer-name">Guinness Draught</div>
+          <div class="beer-abv">4.2% ABV · Creamy, smooth, classic</div>
+          <div class="beer-price" style="margin-top:0.5rem">£5.80 / pint</div>
+        </div>
+        <div class="beer-card">
+          <div class="beer-style">Lager</div>
+          <div class="beer-name">Birra Moretti</div>
+          <div class="beer-abv">4.6% ABV · Crisp, clean, Italian</div>
+          <div class="beer-price" style="margin-top:0.5rem">£5.50 / pint</div>
+        </div>
+        <div class="beer-card">
+          <div class="beer-style">Wheat Beer</div>
+          <div class="beer-name">Peroni Nastro Azzurro</div>
+          <div class="beer-abv">5.1% ABV · Light, refreshing</div>
+          <div class="beer-price" style="margin-top:0.5rem">£5.60 / pint</div>
+        </div>
+        <div class="beer-card">
+          <div class="beer-style">IPA</div>
+          <div class="beer-name">Beavertown Neck Oil</div>
+          <div class="beer-abv">4.3% ABV · Session IPA, citrus</div>
+          <div class="beer-price" style="margin-top:0.5rem">£5.80 / pint</div>
+        </div>
+        <div class="beer-card">
+          <div class="beer-style">Amber Ale</div>
+          <div class="beer-name">London Pride</div>
+          <div class="beer-abv">4.7% ABV · Malty, balanced, classic</div>
+          <div class="beer-price" style="margin-top:0.5rem">£5.70 / pint</div>
+        </div>
+      </div>
+      <p style="font-size:.7rem;color:rgba(245,240,232,.22);margin-top:1.8rem;font-weight:300">Order at the till · All
+        prices in £ · Selection rotates</p>
+    </div>
+
+    <!-- WINE BY GLASS -->
+    <div id="wine-glass" class="mpanel">
+      <h3>Wine by the Glass</h3>
+      <div class="wine-cols">
+        <div>
+          <div class="wcol-title">Red <div class="wcol-sub"><span>175 ml</span><span>250 ml</span><span>Bottle</span>
+            </div>
+          </div>
+          <div class="wine-rows">
+            <div class="wr"><span class="wname">House Red</span>
+              <div class="wprices"><span>5.5</span><span>7.5</span><span>20</span></div>
+            </div>
+            <div class="wr"><span class="wname">Negroamaro</span>
+              <div class="wprices"><span>6.5</span><span>9.5</span><span>23</span></div>
+            </div>
+            <div class="wr"><span class="wname">Nero d'Avola</span>
+              <div class="wprices"><span>7.3</span><span>9.8</span><span>26</span></div>
+            </div>
+            <div class="wr"><span class="wname">Montepulciano</span>
+              <div class="wprices"><span>7.9</span><span>10.8</span><span>28</span></div>
+            </div>
+            <div class="wr"><span class="wname">Merlot</span>
+              <div class="wprices"><span>7.9</span><span>10.8</span><span>28</span></div>
+            </div>
+            <div class="wr"><span class="wname">Malbec</span>
+              <div class="wprices"><span>8.5</span><span>11.5</span><span>30</span></div>
+            </div>
+            <div class="wr"><span class="wname">Chianti</span>
+              <div class="wprices"><span>9.3</span><span>12.7</span><span>33</span></div>
+            </div>
+            <div class="wr"><span class="wname">Primitivo</span>
+              <div class="wprices"><span>10.7</span><span>14.6</span><span>38</span></div>
+            </div>
+          </div>
+          <div style="margin-top:1.8rem">
+            <div class="wcol-title">Sparkling <div class="wcol-sub"><span style="opacity:.4">—</span><span
+                  style="opacity:.4">—</span><span>Bottle</span></div>
+            </div>
+            <div class="wine-rows">
+              <div class="wr"><span class="wname">Mini Prosecco</span>
+                <div class="wprices"><span class="gold">10</span></div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:1.8rem">
+            <div class="wcol-title">Rosé <div class="wcol-sub"><span>175 ml</span><span>250 ml</span><span>Bottle</span>
+              </div>
+            </div>
+            <div class="wine-rows">
+              <div class="wr"><span class="wname">Pinot Grigio Blush</span>
+                <div class="wprices"><span>7.9</span><span>10.8</span><span>28</span></div>
+              </div>
+              <div class="wr"><span class="wname">Primitivo Rosé</span>
+                <div class="wprices"><span>9.3</span><span>12.7</span><span>33</span></div>
+              </div>
+              <div class="wr"><span class="wname">Chemin de Provence</span>
+                <div class="wprices"><span>10.7</span><span>14.6</span><span>38</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="wcol-title">White <div class="wcol-sub"><span>175 ml</span><span>250 ml</span><span>Bottle</span>
+            </div>
+          </div>
+          <div class="wine-rows">
+            <div class="wr"><span class="wname">House White</span>
+              <div class="wprices"><span>5.5</span><span>7.5</span><span>20</span></div>
+            </div>
+            <div class="wr"><span class="wname">Grillo</span>
+              <div class="wprices"><span>7.3</span><span>9.8</span><span>26</span></div>
+            </div>
+            <div class="wr"><span class="wname">Pinot Grigio</span>
+              <div class="wprices"><span>7.9</span><span>10.8</span><span>28</span></div>
+            </div>
+            <div class="wr"><span class="wname">Sauvignon Blanc</span>
+              <div class="wprices"><span>7.9</span><span>10.8</span><span>28</span></div>
+            </div>
+            <div class="wr"><span class="wname">Chardonnay</span>
+              <div class="wprices"><span>9.3</span><span>12.7</span><span>31</span></div>
+            </div>
+            <div class="wr"><span class="wname">Pecorino</span>
+              <div class="wprices"><span>10.7</span><span>14.6</span><span>38</span></div>
+            </div>
+            <div class="wr"><span class="wname">Gavi dei Gavi</span>
+              <div class="wprices"><span>12.4</span><span>16.9</span><span>44</span></div>
+            </div>
+            <div class="wr"><span class="wname">Chablis</span>
+              <div class="wprices"><span>14.6</span><span>20</span><span>52</span></div>
+            </div>
+          </div>
+          <div style="margin-top:1.8rem">
+            <div class="wcol-title">Alcohol Free <div class="wcol-sub"><span>175 ml</span><span>250
+                  ml</span><span>Bottle</span></div>
+            </div>
+            <div class="wine-rows">
+              <div
+                style="font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,240,232,.25);padding:.5rem 0 .2rem">
+                Red</div>
+              <div class="wr"><span class="wname">Shiraz</span>
+                <div class="wprices"><span>6.5</span><span>9.5</span><span>23</span></div>
+              </div>
+              <div
+                style="font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,240,232,.25);padding:.5rem 0 .2rem">
+                White</div>
+              <div class="wr"><span class="wname">Sauvignon Blanc</span>
+                <div class="wprices"><span>6.5</span><span>9.5</span><span>23</span></div>
+              </div>
+              <div
+                style="font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,240,232,.25);padding:.5rem 0 .2rem">
+                Sparkling</div>
+              <div class="wr"><span class="wname">Prosecco</span>
+                <div class="wprices"><span class="gold">20</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:.7rem;color:rgba(245,240,232,.22);font-weight:300;margin-top:1.8rem">Order at the till · All
+        prices in £</p>
+    </div>
+
+    <!-- SPIRITS -->
+    <div id="spirits" class="mpanel">
+      <h3>Spirits</h3>
+      <div class="spirits-grid">
+        <div class="sg-col">
+          <div class="sg-title">Gin <span class="sg-size">25 ml</span></div>
+          <div class="sg-item"><span class="sg-name">Tanqueray</span><span class="sg-price">5.5</span></div>
+          <div class="sg-item"><span class="sg-name">Bombay Sapphire</span><span class="sg-price">5.5</span></div>
+          <div class="sg-item"><span class="sg-name">Hendrick's</span><span class="sg-price">5.6</span></div>
+          <div class="sg-item"><span class="sg-name">Broker's</span><span class="sg-price">5.6</span></div>
+          <div class="sg-item"><span class="sg-name">Gin Mare</span><span class="sg-price">6</span></div>
+          <div class="sg-item"><span class="sg-name">Malfy Pink</span><span class="sg-price">6</span></div>
+          <div class="sg-item"><span class="sg-name">Monkey 47</span><span class="sg-price">6.5</span></div>
+          <div class="sg-item"><span class="sg-name">No. 3</span><span class="sg-price">7.5</span></div>
+
+          <div class="sg-title" style="margin-top:1.5rem">Liquors <span class="sg-size">50 ml</span></div>
+          <div class="sg-item"><span class="sg-name">Limoncello</span><span class="sg-price">5</span></div>
+          <div class="sg-item"><span class="sg-name">Meloncello</span><span class="sg-price">5</span></div>
+          <div class="sg-item"><span class="sg-name">Amaro Montenegro</span><span class="sg-price">5</span></div>
+          <div class="sg-item"><span class="sg-name">Bailey's</span><span class="sg-price">5</span></div>
+          <div class="sg-item"><span class="sg-name">Tia Maria</span><span class="sg-price">5</span></div>
+          <div class="sg-item"><span class="sg-name">Amaretto di Saronno</span><span class="sg-price">5</span></div>
+          <div class="sg-item"><span class="sg-name">Amaro Ramazzotti</span><span class="sg-price">5</span></div>
+          <div class="sg-item"><span class="sg-name">Amaro del Capo</span><span class="sg-price">5</span></div>
+          <div class="sg-item"><span class="sg-name">Amaro Lucano</span><span class="sg-price">5</span></div>
+          <div class="sg-item"><span class="sg-name">Sambuca</span><span class="sg-price">5</span></div>
+          <div class="sg-item"><span class="sg-name">Cointreau</span><span class="sg-price">5</span></div>
+          <div class="sg-item"><span class="sg-name">Grand Marnier</span><span class="sg-price">6</span></div>
+          <div class="sg-item"><span class="sg-name">Southern Comfort</span><span class="sg-price">6</span></div>
+
+          <div class="sg-title" style="margin-top:1.5rem">Tequila <span class="sg-size">Shot</span></div>
+          <div class="sg-item"><span class="sg-name">El Jimador Blanco</span><span class="sg-price">5.5</span></div>
+          <div class="sg-item"><span class="sg-name">El Jimador Reposado</span><span class="sg-price">6.5</span></div>
+
+          <div class="sg-title" style="margin-top:1.5rem">Brandy <span class="sg-size">25 ml</span></div>
+          <div class="sg-item"><span class="sg-name">Hennessy</span><span class="sg-price">5.7</span></div>
+          <div class="sg-item"><span class="sg-name">Courvoisier</span><span class="sg-price">7.5</span></div>
+          <div class="sg-item"><span class="sg-name">Hennessy XO</span><span class="sg-price">18.95</span></div>
+        </div>
+
+        <div class="sg-col">
+          <div class="sg-title">Vodka <span class="sg-size">25 ml</span></div>
+          <div class="sg-item"><span class="sg-name">Smirnoff</span><span class="sg-price">5</span></div>
+          <div class="sg-item"><span class="sg-name">Absolut Vanilla</span><span class="sg-price">5.5</span></div>
+          <div class="sg-item"><span class="sg-name">Cîroc</span><span class="sg-price">6.5</span></div>
+          <div class="sg-item"><span class="sg-name">Grey Goose</span><span class="sg-price">7</span></div>
+          <div class="sg-item"><span class="sg-name">Beluga</span><span class="sg-price">7.5</span></div>
+
+          <div class="sg-title" style="margin-top:1.5rem">Rum <span class="sg-size">25 ml</span></div>
+          <div class="sg-item"><span class="sg-name">Bacardí</span><span class="sg-price">5</span></div>
+          <div class="sg-item"><span class="sg-name">Captain Morgan Dark / Spiced</span><span
+              class="sg-price">5.5</span></div>
+          <div class="sg-item"><span class="sg-name">Kraken Black</span><span class="sg-price">5.5</span></div>
+          <div class="sg-item"><span class="sg-name">Havana Club 7</span><span class="sg-price">6</span></div>
+          <div class="sg-item"><span class="sg-name">Bumbu</span><span class="sg-price">6</span></div>
+
+          <div class="sg-title" style="margin-top:1.5rem">Whisky <span class="sg-size">25 ml</span></div>
+          <div class="sg-item"><span class="sg-name">Jack Daniel's</span><span class="sg-price">5.5</span></div>
+          <div class="sg-item"><span class="sg-name">Jameson</span><span class="sg-price">6</span></div>
+          <div class="sg-item"><span class="sg-name">Famous Grouse</span><span class="sg-price">6</span></div>
+          <div class="sg-item"><span class="sg-name">Johnnie Walker Black Label</span><span class="sg-price">7.5</span>
+          </div>
+
+          <div class="sg-title" style="margin-top:1.5rem">Grappa <span class="sg-size">30 ml</span></div>
+          <span class="grappa-cat">Bianca</span>
+          <div class="sg-item"><span class="sg-name">Russo Greco di Tufo</span><span class="sg-price">6</span></div>
+          <div class="sg-item"><span class="sg-name">Sibona Barbaresco</span><span class="sg-price">7</span></div>
+          <span class="grappa-cat">Barricata</span>
+          <div class="sg-item"><span class="sg-name">Sibona Barbera</span><span class="sg-price">8</span></div>
+          <div class="sg-item"><span class="sg-name">Sibona Barolo</span><span class="sg-price">10</span></div>
+          <div class="sg-item"><span class="sg-name">Sibona Whisky Riserva</span><span class="sg-price">11</span></div>
+          <div class="sg-item"><span class="sg-name">Sibona XO</span><span class="sg-price">16</span></div>
+
+          <div class="sg-title" style="margin-top:1.5rem">Mixers</div>
+          <div class="sg-item"><span class="sg-name">All mixers</span><span class="sg-price">3</span></div>
+        </div>
+      </div>
+      <p style="font-size:.7rem;color:rgba(245,240,232,.22);margin-top:1.8rem;font-weight:300">Order at the till · All
+        prices in £</p>
+    </div>
+
+    <!-- SOFT DRINKS -->
+    <div id="soft" class="mpanel">
+      <h3>Soft Drinks &amp; Alcohol Free</h3>
+      <div style="max-width:400px">
+        <div class="sg-title">Soft Drinks <span class="sg-size">Bottle</span></div>
+        <div class="sg-item"><span class="sg-name">Coke</span><span class="sg-price">3.2</span></div>
+        <div class="sg-item"><span class="sg-name">Coke Zero</span><span class="sg-price">3.2</span></div>
+        <div class="sg-item"><span class="sg-name">Sprite</span><span class="sg-price">3.2</span></div>
+        <div class="sg-item"><span class="sg-name">Fever-Tree Soda Water</span><span class="sg-price">3.2</span></div>
+        <div class="sg-item"><span class="sg-name">Fever-Tree Elderflower Tonic</span><span class="sg-price">3.2</span>
+        </div>
+        <div class="sg-item"><span class="sg-name">Fever-Tree Tonic Water</span><span class="sg-price">3.2</span></div>
+        <div class="sg-item"><span class="sg-name">Fever-Tree Ginger Ale</span><span class="sg-price">3.2</span></div>
+      </div>
+      <p style="font-size:.7rem;color:rgba(245,240,232,.22);margin-top:1.8rem;font-weight:300">Order at the till · All
+        prices in £</p>
+    </div>
+
+  </div>
+
+  <footer>
+    <div class="f-logo">CORK<em>·</em></div>
+    <div class="f-links">
+      <a href="https://instagram.com/corkwinebarbistro" target="_blank">Instagram</a>
+      <a href="https://facebook.com" target="_blank">Facebook</a>
+      <a href="index.html#private">Private Events</a>
+    </div>
+    <div class="f-copy">© 2026 Cork Wine Bar Bistro · Wooburn Green HP10 0EU</div>
+    <div class="f-links">
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="menu.html">Menu</a>
+      <a href="https://instagram.com/corkwinebarbistro" target="_blank">Instagram</a>
+    </div>
+  </footer>
+
+  <div class="mob-bar">
+    <a href="tel:+441628914197" class="mob-call">📞 Call Us</a>
+    <a href="index.html#book" class="mob-book">Book a Table</a>
+  </div>
+
+  <script src="allergen-data.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>

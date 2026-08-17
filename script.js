@@ -94,6 +94,7 @@ let heroInterval;
 
 function startHeroAutoPlay() {
     stopHeroAutoPlay();
+    if (heroSlides.length === 0) return;
     heroInterval = setInterval(() => moveHeroSlide(1), 5000);
 }
 function stopHeroAutoPlay() { if (heroInterval) clearInterval(heroInterval); }
@@ -125,6 +126,7 @@ let aboutInterval;
 
 function startAboutAutoPlay() {
     stopAboutAutoPlay();
+    if (aboutSlides.length === 0) return;
     aboutInterval = setInterval(() => moveAboutSlide(1), 5000);
 }
 function stopAboutAutoPlay() { if (aboutInterval) clearInterval(aboutInterval); }
@@ -194,6 +196,7 @@ function updateOpenStatus() {
 
     const statusEl = document.getElementById('openStatus');
     const textEl = document.getElementById('statusText');
+    if (!statusEl || !textEl) return;
 
     if (isOpen) {
         statusEl.classList.add('open');
@@ -221,51 +224,52 @@ const revealObserver = new IntersectionObserver((entries) => {
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
 // RESERVATION
-const todayStr = new Date().toISOString().split('T')[0];
-document.getElementById('bookDate').setAttribute('min', todayStr);
-
-// --- GESTIONE DINAMICA ORARI MODULO PRENOTAZIONE ---
 const bookDateInput = document.getElementById('bookDate');
 const bookTimeInput = document.getElementById('bookTime');
 
-// Funzione per convertire l'ora in formato 12h UK (es. 2:30 PM)
-function formatToUKTime(hours, minutes) {
-    let period = hours >= 12 ? 'PM' : 'AM';
-    let displayHours = hours > 12 ? hours - 12 : (hours === 0 ? 12 : hours);
-    return `${displayHours}:${String(minutes).padStart(2, '0')} ${period}`;
-}
+if (bookDateInput && bookTimeInput) {
+    const todayStr = new Date().toISOString().split('T')[0];
+    bookDateInput.setAttribute('min', todayStr);
 
-function populateTimeSlots(day) {
-    // Resetta il menu a tendina
-    bookTimeInput.innerHTML = '<option value="" disabled selected>Select time</option>';
+    // --- GESTIONE DINAMICA ORARI MODULO PRENOTAZIONE ---
 
-    // Imposta l'ultimo slot disponibile (22:30 per Tue-Thu, 23:00 per Fri-Sab)
-    let lastSlotHour = 22;
-
-    if (day === 5 || day === 6) { // Venerdì (5) o Sabato (6)
-        lastSlotHour = 23;
+    // Funzione per convertire l'ora in formato 12h UK (es. 2:30 PM)
+    function formatToUKTime(hours, minutes) {
+        let period = hours >= 12 ? 'PM' : 'AM';
+        let displayHours = hours > 12 ? hours - 12 : (hours === 0 ? 12 : hours);
+        return `${displayHours}:${String(minutes).padStart(2, '0')} ${period}`;
     }
 
-    // Genera gli slot ogni 30 minuti
-    for (let h = 12; h <= lastSlotHour; h++) {
-        let startMin = (h === 12) ? 30 : 0; // Il martedì inizia alle 12:30
+    function populateTimeSlots(day) {
+        // Resetta il menu a tendina
+        bookTimeInput.innerHTML = '<option value="" disabled selected>Select time</option>';
 
-        for (let m = startMin; m < 60; m += 30) {
-            // Se siamo all'ultima ora consentita e sono le :30, interrompi (es. non mostrare 23:30)
-            if (h === lastSlotHour && m === 30) break;
+        // Imposta l'ultimo slot disponibile (22:30 per Tue-Thu, 23:00 per Fri-Sab)
+        let lastSlotHour = 22;
 
-            let timeValue = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-            let timeLabel = formatToUKTime(h, m);
+        if (day === 5 || day === 6) { // Venerdì (5) o Sabato (6)
+            lastSlotHour = 23;
+        }
 
-            let option = document.createElement('option');
-            option.value = timeValue;
-            option.textContent = timeLabel;
-            bookTimeInput.appendChild(option);
+        // Genera gli slot ogni 30 minuti
+        for (let h = 12; h <= lastSlotHour; h++) {
+            let startMin = (h === 12) ? 30 : 0; // Il martedì inizia alle 12:30
+
+            for (let m = startMin; m < 60; m += 30) {
+                // Se siamo all'ultima ora consentita e sono le :30, interrompi (es. non mostrare 23:30)
+                if (h === lastSlotHour && m === 30) break;
+
+                let timeValue = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+                let timeLabel = formatToUKTime(h, m);
+
+                let option = document.createElement('option');
+                option.value = timeValue;
+                option.textContent = timeLabel;
+                bookTimeInput.appendChild(option);
+            }
         }
     }
-}
 
-if (bookDateInput) {
     bookDateInput.addEventListener('change', function () {
         const selectedDate = new Date(this.value + 'T00:00:00'); // Aggiunge T00:00:00 per evitare fusi orari
         const day = selectedDate.getDay(); // 0=Dom, 1=Lun, 2=Mar...
@@ -313,7 +317,7 @@ async function handleReservation(event) {
         if (res.ok) {
             feedback.style.display = 'block';
             event.target.reset();
-            document.getElementById('bookDate').setAttribute('min', todayStr);
+            document.getElementById('bookDate').setAttribute('min', new Date().toISOString().split('T')[0]);
             feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             btn.textContent = 'Confirm Reservation';
             btn.disabled = false;
