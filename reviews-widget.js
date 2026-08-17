@@ -1,6 +1,5 @@
 // Reviews Carousel Widget — Cork Wine Bar Bistro
-// One slide visible at a time. Uses rv-* classes to avoid conflicts with
-// the global .carousel-slide { position:absolute; opacity:0 } rule.
+// One review per slide, horizontal layout, fixed-height card.
 
 const ReviewsCarousel = (function () {
   let config = {};
@@ -10,14 +9,6 @@ const ReviewsCarousel = (function () {
   let totalSlides = 0;
   let autoPlayInterval = null;
 
-  // ── Helpers ──────────────────────────────────────────────────────────────
-
-  function getCardsPerSlide() {
-    if (window.innerWidth < 768) return 1;
-    if (window.innerWidth < 1100) return 2;
-    return 3;
-  }
-
   function renderStars(rating) {
     const full = Math.floor(rating);
     const half = rating % 1 >= 0.5 ? 1 : 0;
@@ -25,45 +16,36 @@ const ReviewsCarousel = (function () {
     return '★'.repeat(full) + (half ? '½' : '') + '☆'.repeat(empty);
   }
 
-  function createReviewCard(review) {
-    return `
-      <article class="rv-card">
-        <header class="rv-card-header">
-          <span class="rv-stars">${renderStars(review.rating || 0)}</span>
-          <span class="rv-author">${review.author_name || 'Anonymous'}</span>
-        </header>
-        <p class="rv-text">"${review.text || ''}"</p>
-      </article>`;
+  // ── Render current review into the card ──────────────────────────────────
+
+  function renderCard(index) {
+    const r = allReviews[index];
+    const card = document.querySelector('.rv-card');
+    const dots = document.querySelectorAll('.rv-dot');
+    if (!card || !r) return;
+
+    // Fade out → swap content → fade in
+    card.classList.add('rv-fade-out');
+    setTimeout(() => {
+      card.querySelector('.rv-stars').textContent = renderStars(r.rating || 0);
+      card.querySelector('.rv-author').textContent = r.author_name || 'Anonymous';
+      card.querySelector('.rv-text').textContent = `"${r.text || ''}"`;
+      card.classList.remove('rv-fade-out');
+    }, 200);
+
+    dots.forEach((d, i) => d.classList.toggle('active', i === index));
   }
 
-  // ── Render a single slide's cards ────────────────────────────────────────
+  // ── Navigation ───────────────────────────────────────────────────────────
 
-  function renderSlide(index) {
-    const n = getCardsPerSlide();
-    const start = index * n;
-    const chunk = allReviews.slice(start, start + n);
-
-    const grid = document.querySelector('.rv-grid');
-    if (!grid) return;
-
-    grid.style.setProperty('--spv', n);
-    grid.innerHTML = chunk.map(createReviewCard).join('');
+  function goTo(index) {
+    currentSlide = (index + totalSlides) % totalSlides;
+    renderCard(currentSlide);
   }
 
-  // ── Dot indicators ───────────────────────────────────────────────────────
-
-  function buildIndicators() {
-    return Array.from({ length: totalSlides }, (_, i) =>
-      `<button class="rv-dot ${i === 0 ? 'active' : ''}"
-               onclick="ReviewsCarousel.goToSlide(${i})"
-               aria-label="Slide ${i + 1}"></button>`
-    ).join('');
-  }
-
-  function updateDots() {
-    document.querySelectorAll('.rv-dot')
-      .forEach((el, i) => el.classList.toggle('active', i === currentSlide));
-  }
+  function nextSlide() { goTo(currentSlide + 1); startAutoPlay(); }
+  function prevSlide() { goTo(currentSlide - 1); startAutoPlay(); }
+  function goToSlide(i) { goTo(i); startAutoPlay(); }
 
   // ── Auto-play ────────────────────────────────────────────────────────────
 
@@ -77,30 +59,27 @@ const ReviewsCarousel = (function () {
     if (autoPlayInterval) { clearInterval(autoPlayInterval); autoPlayInterval = null; }
   }
 
-  // ── Navigation ───────────────────────────────────────────────────────────
+  // ── Build indicators ─────────────────────────────────────────────────────
 
-  function goTo(index) {
-    currentSlide = (index + totalSlides) % totalSlides;
-    renderSlide(currentSlide);
-    updateDots();
+  function buildDots() {
+    return Array.from({ length: totalSlides }, (_, i) =>
+      `<button class="rv-dot ${i === 0 ? 'active' : ''}"
+               onclick="ReviewsCarousel.goToSlide(${i})"
+               aria-label="Review ${i + 1}"></button>`
+    ).join('');
   }
 
-  function nextSlide() { goTo(currentSlide + 1); startAutoPlay(); }
-  function prevSlide() { goTo(currentSlide - 1); startAutoPlay(); }
-  function goToSlide(i) { goTo(i); startAutoPlay(); }
-
-  // ── Full widget HTML ─────────────────────────────────────────────────────
+  // ── Full HTML — first review pre-rendered ────────────────────────────────
 
   function createHTML() {
-    const n = getCardsPerSlide();
-    totalSlides = Math.ceil(allReviews.length / n);
+    const r = allReviews[0];
     const rating = (reviewsData?.rating || 0).toFixed(1);
     const total = reviewsData?.totalReviews || allReviews.length;
-    const firstChunk = allReviews.slice(0, n).map(createReviewCard).join('');
 
     return `
       <div class="rv-widget">
-        <div class="rv-header">
+
+        <div class="rv-top">
           <span class="rv-badge">
             <span class="rv-badge-score">${rating}</span>
             <span class="rv-badge-stars">${renderStars(reviewsData?.rating || 0)}</span>
@@ -109,16 +88,20 @@ const ReviewsCarousel = (function () {
         </div>
 
         <div class="rv-carousel">
-          <div class="rv-grid" style="--spv:${n}">
-            ${firstChunk}
-          </div>
-          ${totalSlides > 1 ? `
-            <button class="rv-btn rv-prev" onclick="ReviewsCarousel.prevSlide()" aria-label="Previous">&#10094;</button>
-            <button class="rv-btn rv-next" onclick="ReviewsCarousel.nextSlide()" aria-label="Next">&#10095;</button>
-          ` : ''}
+          ${totalSlides > 1 ? `<button class="rv-btn rv-prev" onclick="ReviewsCarousel.prevSlide()" aria-label="Previous">&#10094;</button>` : ''}
+
+          <article class="rv-card">
+            <div class="rv-card-inner">
+              <span class="rv-stars">${renderStars(r.rating || 0)}</span>
+              <p class="rv-text">"${r.text || ''}"</p>
+              <span class="rv-author">— ${r.author_name || 'Anonymous'}</span>
+            </div>
+          </article>
+
+          ${totalSlides > 1 ? `<button class="rv-btn rv-next" onclick="ReviewsCarousel.nextSlide()" aria-label="Next">&#10095;</button>` : ''}
         </div>
 
-        ${totalSlides > 1 ? `<div class="rv-dots">${buildIndicators()}</div>` : ''}
+        ${totalSlides > 1 ? `<div class="rv-dots">${buildDots()}</div>` : ''}
 
         <div class="rv-footer">
           <a href="https://search.google.com/local/reviews?placeid=ChIJu0aCp0JjdkgRMeuCV3E3DdI"
@@ -127,31 +110,6 @@ const ReviewsCarousel = (function () {
           </a>
         </div>
       </div>`;
-  }
-
-  // ── Resize: rebuild if cards-per-slide changes ───────────────────────────
-
-  function watchResize() {
-    let last = getCardsPerSlide();
-    window.addEventListener('resize', () => {
-      const now = getCardsPerSlide();
-      if (now === last) return;
-      last = now;
-      stopAutoPlay();
-      currentSlide = 0;
-      totalSlides = Math.ceil(allReviews.length / now);
-
-      // Rebuild grid + dots only
-      const grid = document.querySelector('.rv-grid');
-      const dots = document.querySelector('.rv-dots');
-      if (grid) {
-        grid.style.setProperty('--spv', now);
-        const chunk = allReviews.slice(0, now);
-        grid.innerHTML = chunk.map(createReviewCard).join('');
-      }
-      if (dots) dots.innerHTML = buildIndicators();
-      startAutoPlay();
-    });
   }
 
   // ── Fetch & render ───────────────────────────────────────────────────────
@@ -168,11 +126,11 @@ const ReviewsCarousel = (function () {
       reviewsData = await res.json();
       allReviews = (reviewsData.reviews || []).filter(r => r.rating >= 4);
       currentSlide = 0;
+      totalSlides = allReviews.length;
 
       container.innerHTML = createHTML();
       window.ReviewsCarousel = { nextSlide, prevSlide, goToSlide };
       startAutoPlay();
-      watchResize();
 
     } catch (err) {
       console.error('Reviews carousel:', err);
@@ -202,7 +160,6 @@ const ReviewsCarousel = (function () {
   return { init, nextSlide, prevSlide, goToSlide };
 })();
 
-// Single auto-init via data attribute
 document.addEventListener('DOMContentLoaded', () => {
   const el = document.querySelector('[data-reviews-widget]');
   if (el) {

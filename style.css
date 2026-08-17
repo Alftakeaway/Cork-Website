@@ -1965,8 +1965,8 @@ footer {
     font-size: 0.9rem;
 }
 
-/* Badge — centrato */
-.rv-header {
+/* Top row: badge centrato */
+.rv-top {
     text-align: center;
     margin-bottom: 1.5rem;
 }
@@ -2003,106 +2003,91 @@ footer {
     letter-spacing: 0.1em;
 }
 
-/* Carousel shell — position:relative per i btn prev/next */
+/* Carousel row: prev btn + card + next btn */
 .rv-carousel {
-    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
-/* Grid di cards — --spv iniettato da JS */
-.rv-grid {
-    display: grid;
-    grid-template-columns: repeat(var(--spv, 3), 1fr);
-    gap: 1.5rem;
-    width: 100%;
-}
-
-/* Cards */
+/* Fixed-height card — tall enough for the longest review + breathing room */
 .rv-card {
+    flex: 1;
+    min-height: 160px;
+    /* calibrated on longest review */
     background: white;
     border: 1px solid var(--bw);
     border-radius: 3px;
-    padding: 1.5rem;
+    padding: 1.75rem 2rem;
+    display: flex;
+    align-items: center;
+    /* vertically centre content */
+    transition: opacity 0.2s ease;
+}
+
+.rv-card.rv-fade-out {
+    opacity: 0;
+}
+
+.rv-card-inner {
     display: flex;
     flex-direction: column;
-    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
-}
-
-.rv-card:hover {
-    border-color: var(--gold-l);
-    box-shadow: 0 8px 24px -8px rgba(28, 22, 18, 0.1);
-    transform: translateY(-2px);
-}
-
-.rv-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
     gap: 0.75rem;
-    margin-bottom: 1rem;
+    width: 100%;
 }
 
 .rv-stars {
     color: var(--gold);
-    font-size: 0.95rem;
-    letter-spacing: 0.05em;
-    flex-shrink: 0;
+    font-size: 1rem;
+    letter-spacing: 0.06em;
+}
+
+.rv-text {
+    color: var(--stone);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    font-weight: 300;
+    font-style: italic;
+    margin: 0;
 }
 
 .rv-author {
     font-weight: 500;
     color: var(--ink);
-    font-size: 0.8rem;
-    text-align: right;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
 }
 
-.rv-text {
-    color: var(--stone);
-    font-size: 0.85rem;
-    line-height: 1.7;
-    font-weight: 300;
-    margin: 0;
-    font-style: italic;
-    flex: 1;
-}
-
-/* Prev / Next — posizionati fuori dal grid */
+/* Prev / Next — inline with card */
 .rv-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(28, 22, 18, 0.6);
-    border: 1px solid rgba(184, 147, 58, 0.3);
-    color: var(--cream);
-    font-size: 1.1rem;
-    padding: 0.5rem 0.8rem;
+    flex-shrink: 0;
+    background: rgba(28, 22, 18, 0.06);
+    border: 1px solid var(--bw);
+    color: var(--ink);
+    font-size: 1rem;
+    width: 2.4rem;
+    height: 2.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    z-index: 10;
     border-radius: 2px;
-    transition: background 0.2s, border-color 0.2s;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
 
 .rv-btn:hover {
     background: var(--gold);
-    color: var(--ink);
     border-color: var(--gold);
+    color: white;
 }
 
-.rv-prev {
-    left: -2.5rem;
-}
-
-.rv-next {
-    right: -2.5rem;
-}
-
-/* Dots */
+/* Dots — centrati sotto */
 .rv-dots {
     display: flex;
     justify-content: center;
     gap: 0.5rem;
-    margin-top: 1.5rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--bw);
+    margin-top: 1.25rem;
 }
 
 .rv-dot {
@@ -2110,7 +2095,7 @@ footer {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: rgba(28, 22, 18, 0.2);
+    background: rgba(28, 22, 18, 0.15);
     cursor: pointer;
     padding: 0;
     transition: background 0.2s, width 0.2s;
@@ -2130,14 +2115,11 @@ footer {
 .rv-footer {
     text-align: center;
     margin-top: 1.5rem;
-    padding-top: 1.5rem;
+    padding-top: 1.25rem;
     border-top: 1px solid var(--bw);
 }
 
 .rv-view-all {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
     color: var(--gold);
     font-size: 0.75rem;
     letter-spacing: 0.08em;
@@ -2151,40 +2133,23 @@ footer {
     border-bottom-color: var(--gold);
 }
 
-/* Responsive */
-@media (max-width: 1100px) {
-    .rv-prev {
-        left: -1.5rem;
-    }
-
-    .rv-next {
-        right: -1.5rem;
-    }
-}
-
-@media (max-width: 768px) {
+/* Mobile */
+@media (max-width: 600px) {
     .rv-widget {
-        padding: 1.5rem;
+        padding: 1.25rem;
     }
 
     .rv-badge-score {
         font-size: 2rem;
     }
 
-    .rv-prev {
-        left: 0.25rem;
-        z-index: 10;
+    .rv-card {
+        padding: 1.25rem 1rem;
+        min-height: 140px;
     }
 
-    .rv-next {
-        right: 0.25rem;
-        z-index: 10;
-    }
-
-    .rv-btn {
-        background: rgba(28, 22, 18, 0.8);
-        padding: 0.4rem 0.6rem;
-        font-size: 1rem;
+    .rv-text {
+        font-size: 0.85rem;
     }
 }
 
