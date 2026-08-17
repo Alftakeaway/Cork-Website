@@ -767,8 +767,15 @@ h2 em {
 }
 
 @keyframes popIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 .mpanel {
@@ -1941,7 +1948,9 @@ footer {
 }
 
 /* REVIEWS CAROUSEL WIDGET */
-.reviews-carousel-widget {
+/* ── Reviews Widget (rv-* classes, isolated from global .carousel-slide) ── */
+
+.rv-widget {
     background: var(--warm);
     border: 1px solid var(--bw);
     border-radius: 4px;
@@ -1949,23 +1958,21 @@ footer {
     font-family: var(--fb);
 }
 
-.reviews-carousel-widget.loading .g-loading,
-.reviews-carousel-widget.error .g-error {
+.rv-loading-text,
+.rv-widget.rv-error p {
     text-align: center;
     color: var(--stone);
     padding: 2rem;
     font-size: 0.9rem;
 }
 
-.reviews-carousel-header {
+/* Header / badge */
+.rv-header {
     margin-bottom: 1.5rem;
-}
-
-.reviews-summary {
     text-align: center;
 }
 
-.reviews-rating-badge {
+.rv-badge {
     display: inline-flex;
     flex-direction: column;
     align-items: center;
@@ -1976,20 +1983,20 @@ footer {
     color: var(--cream);
 }
 
-.rating-value {
+.rv-badge-score {
     font-family: var(--fd);
     font-size: 2.5rem;
     font-weight: 300;
     line-height: 1;
 }
 
-.rating-stars {
+.rv-badge-stars {
     color: var(--gold);
     font-size: 1.1rem;
     letter-spacing: 0.08em;
 }
 
-.rating-count {
+.rv-badge-count {
     font-size: 0.75rem;
     color: rgba(245, 240, 232, 0.6);
     font-weight: 300;
@@ -1997,42 +2004,40 @@ footer {
     letter-spacing: 0.1em;
 }
 
-/* Carousel - horizontal flex */
-.reviews-carousel-widget .carousel {
+/* Carousel shell */
+.rv-carousel {
     position: relative;
 }
 
-.reviews-carousel-widget .carousel-track-container {
+.rv-track-wrap {
     overflow: hidden;
-    position: relative;
     width: 100%;
 }
 
-.reviews-carousel-widget .carousel-track {
+.rv-track {
     display: flex;
     transition: transform 0.5s ease;
-    width: max-content;
+    /* width stays auto so flex children define the total */
 }
 
-.reviews-carousel-widget .carousel-slide {
+/* Each slide = 100% of the visible track-wrap */
+.rv-slide {
     flex: 0 0 100%;
-    min-width: 100%;
-    display: flex;
-    align-items: stretch;
-}
-
-.reviews-carousel-widget .carousel-slide .review-slide-grid {
     width: 100%;
+    /* explicit width prevents collapse */
+    box-sizing: border-box;
 }
 
-.review-slide-grid {
+/* Grid inside each slide — --spv set by JS */
+.rv-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(var(--spv, 3), 1fr);
     gap: 1.5rem;
     width: 100%;
 }
 
-.review-card {
+/* Cards */
+.rv-card {
     background: white;
     border: 1px solid var(--bw);
     border-radius: 3px;
@@ -2040,16 +2045,15 @@ footer {
     display: flex;
     flex-direction: column;
     transition: all 0.2s;
-    height: 100%;
 }
 
-.review-card:hover {
+.rv-card:hover {
     border-color: var(--gold-l);
     box-shadow: 0 8px 24px -8px rgba(28, 22, 18, 0.1);
     transform: translateY(-2px);
 }
 
-.review-card-header {
+.rv-card-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -2057,22 +2061,21 @@ footer {
     margin-bottom: 1rem;
 }
 
-.review-stars {
+.rv-stars {
     color: var(--gold);
     font-size: 0.95rem;
     letter-spacing: 0.05em;
-    line-height: 1;
     flex-shrink: 0;
 }
 
-.review-author {
+.rv-author {
     font-weight: 500;
     color: var(--ink);
     font-size: 0.8rem;
     text-align: right;
 }
 
-.review-text {
+.rv-text {
     color: var(--stone);
     font-size: 0.85rem;
     line-height: 1.7;
@@ -2082,8 +2085,8 @@ footer {
     flex: 1;
 }
 
-/* Carousel buttons */
-.reviews-carousel-widget .carousel-btn {
+/* Prev / Next buttons — outside the track-wrap */
+.rv-btn {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -2098,23 +2101,22 @@ footer {
     transition: background 0.2s, border-color 0.2s;
 }
 
-.reviews-carousel-widget .carousel-btn:hover {
+.rv-btn:hover {
     background: var(--gold);
     color: var(--ink);
     border-color: var(--gold);
 }
 
-.reviews-carousel-widget .carousel-btn.prev {
+.rv-prev {
     left: -2.5rem;
 }
 
-.reviews-carousel-widget .carousel-btn.next {
+.rv-next {
     right: -2.5rem;
 }
 
-/* Indicators */
-.reviews-carousel-widget .carousel-nav {
-    position: static;
+/* Dot indicators */
+.rv-dots {
     display: flex;
     justify-content: center;
     gap: 0.5rem;
@@ -2123,7 +2125,7 @@ footer {
     border-top: 1px solid var(--bw);
 }
 
-.reviews-carousel-widget .carousel-indicator {
+.rv-dot {
     border: none;
     width: 8px;
     height: 8px;
@@ -2131,27 +2133,28 @@ footer {
     background: rgba(28, 22, 18, 0.2);
     cursor: pointer;
     transition: background 0.2s, width 0.2s;
+    padding: 0;
 }
 
-.reviews-carousel-widget .carousel-indicator.active {
+.rv-dot.active {
     background: var(--gold);
     width: 24px;
     border-radius: 4px;
 }
 
-.reviews-carousel-widget .carousel-indicator:hover {
+.rv-dot:hover {
     background: var(--gold-l);
 }
 
 /* Footer */
-.reviews-carousel-footer {
+.rv-footer {
     text-align: center;
     margin-top: 1.5rem;
     padding-top: 1.5rem;
     border-top: 1px solid var(--bw);
 }
 
-.reviews-view-all {
+.rv-view-all {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -2164,52 +2167,45 @@ footer {
     font-weight: 500;
 }
 
-.reviews-view-all:hover {
+.rv-view-all:hover {
     border-bottom-color: var(--gold);
 }
 
-/* Mobile adjustments */
+/* Responsive */
 @media (max-width: 1024px) {
-    .review-slide-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .reviews-carousel-widget .carousel-btn.prev {
+    .rv-prev {
         left: -1.5rem;
     }
-    
-    .reviews-carousel-widget .carousel-btn.next {
+
+    .rv-next {
         right: -1.5rem;
     }
 }
 
 @media (max-width: 768px) {
-    .reviews-carousel-widget {
+    .rv-widget {
         padding: 1.5rem;
     }
-    
-    .review-slide-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .rating-value {
+
+    .rv-badge-score {
         font-size: 2rem;
     }
-    
-    .reviews-carousel-widget .carousel-btn {
+
+    .rv-btn {
         background: rgba(28, 22, 18, 0.8);
         padding: 0.4rem 0.6rem;
         font-size: 1rem;
     }
-    
-    .reviews-carousel-widget .carousel-btn.prev {
-        left: 0.5rem;
+
+    .rv-prev {
+        left: 0.2rem;
     }
-    
-    .reviews-carousel-widget .carousel-btn.next {
-        right: 0.5rem;
+
+    .rv-next {
+        right: 0.2rem;
     }
 }
+
 .hamburger {
     display: none;
     background: none;

@@ -1,16 +1,18 @@
-// Local Reviews Carousel Widget - reads reviews.json from repo
-// Horizontal flex carousel like hero
+// Reviews Carousel Widget — Cork Wine Bar Bistro
+// Uses rv-* class names to avoid conflicts with the global .carousel-slide CSS
+// (which uses position:absolute + opacity fade for hero/about carousels).
 
 const ReviewsCarousel = (function () {
   let config = {};
   let reviewsData = null;
   let currentSlide = 0;
-  let autoPlayInterval = null;
   let totalSlides = 0;
-  let slidesPerView = 1;
+  let autoPlayInterval = null;
+  let resizeObserver = null;
+
+  // ── Helpers ──────────────────────────────────────────────────────────────
 
   function getSlidesPerView() {
-    if (window.innerWidth < 480) return 1;
     if (window.innerWidth < 768) return 1;
     if (window.innerWidth < 1024) return 2;
     return 3;
@@ -24,154 +26,101 @@ const ReviewsCarousel = (function () {
   }
 
   function createReviewCard(review) {
-    const authorName = review.author_name || 'Anonymous';
+    const author = review.author_name || 'Anonymous';
     const rating = review.rating || 0;
     const text = review.text || '';
-
     return `
-      <article class="review-card">
-        <header class="review-card-header">
-          <span class="review-stars" aria-label="${rating} out of 5 stars">${renderStars(rating)}</span>
-          <span class="review-author">${authorName}</span>
+      <article class="rv-card">
+        <header class="rv-card-header">
+          <span class="rv-stars" aria-label="${rating} out of 5 stars">${renderStars(rating)}</span>
+          <span class="rv-author">${author}</span>
         </header>
-        <p class="review-text">"${text}"</p>
-      </article>
-    `;
+        <p class="rv-text">"${text}"</p>
+      </article>`;
   }
 
-  function createCarouselHTML(reviews) {
-    slidesPerView = getSlidesPerView();
-    totalSlides = Math.ceil(reviews.length / slidesPerView);
-    const slides = [];
+  // ── Build slides ─────────────────────────────────────────────────────────
 
+  function buildSlides(reviews) {
+    const perView = getSlidesPerView();
+    totalSlides = Math.ceil(reviews.length / perView);
+    let html = '';
     for (let i = 0; i < totalSlides; i++) {
-      const slideReviews = reviews.slice(i * slidesPerView, (i + 1) * slidesPerView);
-      slides.push(`
-        <div class="carousel-slide" data-slide="${i}">
-          <div class="review-slide-grid">
-            ${slideReviews.map(createReviewCard).join('')}
+      const chunk = reviews.slice(i * perView, (i + 1) * perView);
+      html += `
+        <div class="rv-slide" data-slide="${i}">
+          <div class="rv-grid" style="--spv:${perView}">
+            ${chunk.map(createReviewCard).join('')}
           </div>
-        </div>
-      `);
+        </div>`;
     }
+    return html;
+  }
 
-    const indicators = Array.from({ length: totalSlides }, (_, i) => 
-      `<button class="carousel-indicator ${i === 0 ? 'active' : ''}" onclick="ReviewsCarousel.goToSlide(${i})" aria-label="Go to slide ${i + 1}"></button>`
+  function buildIndicators() {
+    return Array.from({ length: totalSlides }, (_, i) =>
+      `<button class="rv-dot ${i === 0 ? 'active' : ''}"
+               onclick="ReviewsCarousel.goToSlide(${i})"
+               aria-label="Slide ${i + 1}"></button>`
     ).join('');
+  }
+
+  // ── Full HTML ────────────────────────────────────────────────────────────
+
+  function createHTML(reviews) {
+    const rating = (reviewsData?.rating || 0).toFixed(1);
+    const total = reviewsData?.totalReviews || reviews.length;
 
     return `
-      <div class="reviews-carousel-widget">
-        <div class="reviews-carousel-header">
-          <div class="reviews-summary">
-            <span class="reviews-rating-badge">
-              <span class="rating-value">${(reviewsData?.rating || 0).toFixed(1)}</span>
-              <span class="rating-stars">${renderStars(reviewsData?.rating || 0)}</span>
-              <span class="rating-count">${reviewsData?.totalReviews || reviews.length} reviews</span>
-            </span>
-          </div>
+      <div class="rv-widget">
+        <div class="rv-header">
+          <span class="rv-badge">
+            <span class="rv-badge-score">${rating}</span>
+            <span class="rv-badge-stars">${renderStars(reviewsData?.rating || 0)}</span>
+            <span class="rv-badge-count">${total} reviews</span>
+          </span>
         </div>
-        <div class="carousel">
-          <div class="carousel-track-container">
-            <div class="carousel-track">
-              ${slides.join('')}
+
+        <div class="rv-carousel">
+          <div class="rv-track-wrap">
+            <div class="rv-track">
+              ${buildSlides(reviews)}
             </div>
           </div>
           ${totalSlides > 1 ? `
-            <button class="carousel-btn prev" onclick="ReviewsCarousel.prevSlide()" aria-label="Previous reviews">&#10094;</button>
-            <button class="carousel-btn next" onclick="ReviewsCarousel.nextSlide()" aria-label="Next reviews">&#10095;</button>
-            <div class="carousel-nav">
-              ${indicators}
-            </div>
+            <button class="rv-btn rv-prev" onclick="ReviewsCarousel.prevSlide()" aria-label="Previous">&#10094;</button>
+            <button class="rv-btn rv-next" onclick="ReviewsCarousel.nextSlide()" aria-label="Next">&#10095;</button>
+            <div class="rv-dots">${buildIndicators()}</div>
           ` : ''}
         </div>
-        <div class="reviews-carousel-footer">
-          <a href="https://search.google.com/local/reviews?placeid=ChIJu0aCp0JjdkgRMeuCV3E3DdI" 
-             target="_blank" rel="noopener" class="reviews-view-all">
-            View all ${reviewsData?.totalReviews || reviews.length} reviews on Google →
+
+        <div class="rv-footer">
+          <a href="https://search.google.com/local/reviews?placeid=ChIJu0aCp0JjdkgRMeuCV3E3DdI"
+             target="_blank" rel="noopener" class="rv-view-all">
+            View all ${total} reviews on Google →
           </a>
         </div>
-      </div>
-    `;
+      </div>`;
   }
 
-  async function fetchReviews() {
-    const url = config.jsonUrl || 'reviews.json';
-    const response = await fetch(url);
-    if (!response.ok) throw new Error(`Failed to load ${url}: ${response.status}`);
-    return response.json();
+  // ── Carousel movement ────────────────────────────────────────────────────
+
+  function updateCarousel() {
+    const track = document.querySelector('.rv-track');
+    if (!track) return;
+    track.style.transform = `translateX(-${currentSlide * 100}%)`;
+    document.querySelectorAll('.rv-dot')
+      .forEach((el, i) => el.classList.toggle('active', i === currentSlide));
   }
 
-  function filterReviews(reviews) {
-    return reviews.filter(r => r.rating >= 4);
-  }
-
-  async function render(containerId) {
-    const container = document.getElementById(containerId);
-    if (!container) {
-      console.error(`Container #${containerId} not found`);
-      return;
-    }
-
-    container.innerHTML = `
-      <div class="reviews-carousel-widget loading">
-        <div class="g-loading">Loading reviews…</div>
-      </div>
-    `;
-
-    try {
-      reviewsData = await fetchReviews();
-      const filteredReviews = filterReviews(reviewsData.reviews);
-      container.innerHTML = createCarouselHTML(filteredReviews);
-      
-      // Start auto-play
-      startAutoPlay();
-      
-      // Handle resize - re-render if slides per view changes
-      window.addEventListener('resize', debounce(() => {
-        const newSlidesPerView = getSlidesPerView();
-        if (newSlidesPerView !== slidesPerView) {
-          currentSlide = 0;
-          render(containerId);
-        }
-      }, 250));
-      
-    } catch (error) {
-      console.error('Reviews carousel error:', error);
-      container.innerHTML = `
-        <div class="reviews-carousel-widget error">
-          <p class="g-error">Unable to load reviews.</p>
-          <a href="https://search.google.com/local/reviews?placeid=ChIJu0aCp0JjdkgRMeuCV3E3DdI" 
-             target="_blank" rel="noopener" class="reviews-view-all">
-            View reviews on Google →
-          </a>
-        </div>
-      `;
-    }
-}
-  
   function startAutoPlay() {
     stopAutoPlay();
     if (totalSlides <= 1) return;
-    autoPlayInterval = setInterval(() => nextSlide(), 6000);
+    autoPlayInterval = setInterval(nextSlide, 6000);
   }
 
   function stopAutoPlay() {
-    if (autoPlayInterval) clearInterval(autoPlayInterval);
-  }
-
-  function updateCarousel() {
-    const track = document.querySelector('.reviews-carousel-widget .carousel-track');
-    const indicators = document.querySelectorAll('.reviews-carousel-widget .carousel-indicator');
-    
-    if (!track) return;
-
-    // Each carousel-slide is 100% width
-    const translateX = currentSlide * 100;
-    track.style.transform = `translateX(-${translateX}%)`;
-
-    indicators.forEach((ind, i) => {
-      ind.classList.toggle('active', i === currentSlide);
-    });
+    if (autoPlayInterval) { clearInterval(autoPlayInterval); autoPlayInterval = null; }
   }
 
   function nextSlide() {
@@ -192,21 +141,83 @@ const ReviewsCarousel = (function () {
     startAutoPlay();
   }
 
-  function debounce(fn, delay) {
-    let timeoutId;
-    return (...args) => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => fn(...args), delay);
-    };
+  // ── Fetch & render ───────────────────────────────────────────────────────
+
+  async function render(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    container.innerHTML = `<div class="rv-widget rv-loading"><p class="rv-loading-text">Loading reviews…</p></div>`;
+
+    try {
+      const res = await fetch(config.jsonUrl || 'reviews.json');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      reviewsData = await res.json();
+
+      const filtered = (reviewsData.reviews || []).filter(r => r.rating >= 4);
+      currentSlide = 0;
+      container.innerHTML = createHTML(filtered);
+
+      window.ReviewsCarousel = { nextSlide, prevSlide, goToSlide };
+      startAutoPlay();
+      watchResize(filtered);
+
+    } catch (err) {
+      console.error('Reviews carousel:', err);
+      container.innerHTML = `
+        <div class="rv-widget rv-error">
+          <p>Unable to load reviews.</p>
+          <a href="https://search.google.com/local/reviews?placeid=ChIJu0aCp0JjdkgRMeuCV3E3DdI"
+             target="_blank" rel="noopener" class="rv-view-all">View reviews on Google →</a>
+        </div>`;
+    }
   }
 
-  function init(options = {}) {
-    config = {
-      jsonUrl: 'reviews.json',
-      containerId: 'reviews-widget',
-      ...options
-    };
+  // ── Resize observer ──────────────────────────────────────────────────────
 
+  function watchResize(reviews) {
+    if (resizeObserver) resizeObserver.disconnect();
+    let lastPerView = getSlidesPerView();
+
+    resizeObserver = new ResizeObserver(() => {
+      const nowPerView = getSlidesPerView();
+      if (nowPerView === lastPerView) return;
+      lastPerView = nowPerView;
+      currentSlide = 0;
+      stopAutoPlay();
+
+      const perView = getSlidesPerView();
+      totalSlides = Math.ceil(reviews.length / perView);
+
+      const track = document.querySelector('.rv-track');
+      const dots = document.querySelector('.rv-dots');
+
+      if (track) {
+        track.innerHTML = '';
+        for (let i = 0; i < totalSlides; i++) {
+          const chunk = reviews.slice(i * perView, (i + 1) * perView);
+          track.insertAdjacentHTML('beforeend', `
+            <div class="rv-slide" data-slide="${i}">
+              <div class="rv-grid" style="--spv:${perView}">
+                ${chunk.map(createReviewCard).join('')}
+              </div>
+            </div>`);
+        }
+        track.style.transform = 'translateX(0)';
+      }
+
+      if (dots) dots.innerHTML = buildIndicators();
+      startAutoPlay();
+    });
+
+    const widget = document.querySelector('.rv-widget');
+    if (widget) resizeObserver.observe(widget);
+  }
+
+  // ── Init ─────────────────────────────────────────────────────────────────
+
+  function init(options = {}) {
+    config = { jsonUrl: 'reviews.json', containerId: 'reviews-widget', ...options };
     window.ReviewsCarousel = { nextSlide, prevSlide, goToSlide };
 
     if (document.readyState === 'loading') {
@@ -216,24 +227,18 @@ const ReviewsCarousel = (function () {
     }
   }
 
-  function refresh(containerId) {
-    currentSlide = 0;
-    render(containerId || config.containerId);
-  }
-
-  return { init, refresh, nextSlide, prevSlide, goToSlide };
+  return { init, nextSlide, prevSlide, goToSlide };
 })();
 
+// Single auto-init
 document.addEventListener('DOMContentLoaded', () => {
   const el = document.querySelector('[data-reviews-widget]');
   if (el) {
     ReviewsCarousel.init({
       jsonUrl: el.dataset.jsonUrl || 'reviews.json',
-      containerId: el.id || 'reviews-widget'
+      containerId: el.id || 'reviews-widget',
     });
   }
 });
 
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = ReviewsCarousel;
-}
+if (typeof module !== 'undefined' && module.exports) module.exports = ReviewsCarousel;
