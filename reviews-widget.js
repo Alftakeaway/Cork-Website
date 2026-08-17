@@ -1,13 +1,13 @@
 // Local Reviews Carousel Widget - reads reviews.json from repo
-// Carousel-style like hero images
+// Horizontal flex carousel like hero
 
 const ReviewsCarousel = (function () {
   let config = {};
   let reviewsData = null;
   let currentSlide = 0;
   let autoPlayInterval = null;
-  const SLIDES_PER_VIEW = getSlidesPerView();
   let totalSlides = 0;
+  let slidesPerView = 1;
 
   function getSlidesPerView() {
     if (window.innerWidth < 480) return 1;
@@ -40,13 +40,14 @@ const ReviewsCarousel = (function () {
   }
 
   function createCarouselHTML(reviews) {
-    totalSlides = Math.ceil(reviews.length / SLIDES_PER_VIEW);
+    slidesPerView = getSlidesPerView();
+    totalSlides = Math.ceil(reviews.length / slidesPerView);
     const slides = [];
 
     for (let i = 0; i < totalSlides; i++) {
-      const slideReviews = reviews.slice(i * SLIDES_PER_VIEW, (i + 1) * SLIDES_PER_VIEW);
+      const slideReviews = reviews.slice(i * slidesPerView, (i + 1) * slidesPerView);
       slides.push(`
-        <div class="carousel-slide ${i === 0 ? 'current-slide' : ''}" data-slide="${i}">
+        <div class="carousel-slide" data-slide="${i}">
           <div class="review-slide-grid">
             ${slideReviews.map(createReviewCard).join('')}
           </div>
@@ -71,7 +72,9 @@ const ReviewsCarousel = (function () {
         </div>
         <div class="carousel">
           <div class="carousel-track-container">
-            ${slides.join('')}
+            <div class="carousel-track">
+              ${slides.join('')}
+            </div>
           </div>
           ${totalSlides > 1 ? `
             <button class="carousel-btn prev" onclick="ReviewsCarousel.prevSlide()" aria-label="Previous reviews">&#10094;</button>
@@ -99,7 +102,6 @@ const ReviewsCarousel = (function () {
   }
 
   function filterReviews(reviews) {
-    // Only 4 and 5 star reviews
     return reviews.filter(r => r.rating >= 4);
   }
 
@@ -124,11 +126,12 @@ const ReviewsCarousel = (function () {
       // Start auto-play
       startAutoPlay();
       
-      // Handle resize
+      // Handle resize - re-render if slides per view changes
       window.addEventListener('resize', debounce(() => {
         const newSlidesPerView = getSlidesPerView();
-        if (newSlidesPerView !== SLIDES_PER_VIEW) {
-          location.reload(); // Simple approach - reload to recalculate slides
+        if (newSlidesPerView !== slidesPerView) {
+          currentSlide = 0;
+          render(containerId);
         }
       }, 250));
       
@@ -157,18 +160,16 @@ const ReviewsCarousel = (function () {
   }
 
   function updateCarousel() {
-    const track = document.querySelector('.reviews-carousel-widget .carousel-track-container');
-    const slides = document.querySelectorAll('.reviews-carousel-widget .carousel-slide');
+    const track = document.querySelector('.reviews-carousel-widget .carousel-track');
     const indicators = document.querySelectorAll('.reviews-carousel-widget .carousel-indicator');
     
-    if (!track || slides.length === 0) return;
+    if (!track) return;
 
-    const slideWidth = 100 / SLIDES_PER_VIEW;
-    track.style.transform = `translateX(-${currentSlide * slideWidth * SLIDES_PER_VIEW}%)`;
+    // Each slide takes 100% / slidesPerView of the track width
+    const slidePercent = 100 / slidesPerView;
+    const translateX = currentSlide * slidePercent;
+    track.style.transform = `translateX(-${translateX}%)`;
 
-    slides.forEach((slide, i) => {
-      slide.classList.toggle('current-slide', i === currentSlide);
-    });
     indicators.forEach((ind, i) => {
       ind.classList.toggle('active', i === currentSlide);
     });
@@ -207,7 +208,6 @@ const ReviewsCarousel = (function () {
       ...options
     };
 
-    // Expose globally for inline onclick handlers
     window.ReviewsCarousel = { nextSlide, prevSlide, goToSlide };
 
     if (document.readyState === 'loading') {
@@ -225,7 +225,6 @@ const ReviewsCarousel = (function () {
   return { init, refresh, nextSlide, prevSlide, goToSlide };
 })();
 
-// Auto-init
 document.addEventListener('DOMContentLoaded', () => {
   const el = document.querySelector('[data-reviews-widget]');
   if (el) {
