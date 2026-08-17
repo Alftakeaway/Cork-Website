@@ -59,6 +59,40 @@
       padding-bottom: .8rem;
     }
 
+    /* Cheese cards blended into the dark menu theme */
+    .menu-page .cheese-card {
+      background: rgba(245, 240, 232, .04);
+      border: 1px solid rgba(245, 240, 232, .12);
+      text-align: center;
+      cursor: default;
+    }
+
+    .menu-page .cheese-card:hover {
+      border-color: var(--gold-l);
+      box-shadow: 0 12px 40px -12px rgba(0, 0, 0, 0.4);
+    }
+
+    .menu-page .cheese-card::before {
+      width: 100%;
+      height: 0;
+    }
+
+    .menu-page .cheese-card:hover::before {
+      height: 3px;
+    }
+
+    .menu-page .cheese-name {
+      color: var(--cream);
+    }
+
+    .menu-page .cheese-tag {
+      color: var(--gold);
+    }
+
+    .menu-page .cheese-desc {
+      color: rgba(245, 240, 232, .65);
+    }
+
     @media print {
       body {
         background: white;
@@ -98,6 +132,23 @@
       .fi-price,
       .sg-price,
       .wprices {
+        color: #1C1612;
+      }
+
+      .menu-page .cheese-card {
+        background: white;
+        border: 1px solid #ddd;
+      }
+
+      .menu-page .cheese-name {
+        color: #1C1612;
+      }
+
+      .menu-page .cheese-tag {
+        color: #1C1612;
+      }
+
+      .menu-page .cheese-desc {
         color: #1C1612;
       }
     }
