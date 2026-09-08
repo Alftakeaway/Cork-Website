@@ -155,18 +155,30 @@ const menuToggle = document.getElementById('menuToggle');
 const navLinks = document.querySelector('.nav-links');
 
 if (menuToggle) {
+    menuToggle.setAttribute('aria-expanded', 'false');
     menuToggle.addEventListener('click', () => {
         navLinks.classList.toggle('nav-open');
+        const open = navLinks.classList.contains('nav-open');
+        menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
         // Cambia l'icona da ☰ a ✕
-        menuToggle.textContent = navLinks.classList.contains('nav-open') ? '✕' : '☰';
+        menuToggle.textContent = open ? '✕' : '☰';
     });
 
     // Chiudi il menu se clicco su un link
     navLinks.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => {
             navLinks.classList.remove('nav-open');
+            menuToggle.setAttribute('aria-expanded', 'false');
             menuToggle.textContent = '☰';
         });
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && navLinks.classList.contains('nav-open')) {
+            navLinks.classList.remove('nav-open');
+            menuToggle.setAttribute('aria-expanded', 'false');
+            menuToggle.textContent = '☰';
+        }
     });
 }
 // OPEN/CLOSED STATUS

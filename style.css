@@ -24,6 +24,42 @@ html {
     scroll-behavior: smooth
 }
 
+:focus-visible {
+    outline: 3px solid var(--gold);
+    outline-offset: 2px
+}
+
+/* Skip link: visibile solo alla tastiera */
+.skip {
+    position: absolute;
+    left: 12px;
+    top: -70px;
+    z-index: 200;
+    background: var(--ink);
+    color: var(--cream);
+    font-size: 14px;
+    font-weight: 600;
+    padding: 11px 18px;
+    border-radius: 10px;
+    text-decoration: none;
+}
+
+.skip:focus {
+    top: 12px
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto
+    }
+
+    .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none
+    }
+}
+
 body {
     background: var(--warm);
     color: var(--ink);

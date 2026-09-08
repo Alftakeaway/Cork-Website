@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://corkwooburgreen.co.uk/sitemap.xml

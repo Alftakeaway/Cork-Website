@@ -7,6 +7,23 @@
   <title>Cork · Wine Bar Bistro · Wooburn Green</title>
   <meta name="description"
     content="Cork Wine Bar Bistro - intimate wine bar in Wooburn Green. Artisanal charcuterie, 25+ premium cheeses, curated Italian wines, live music & private events.">
+  <link rel="canonical" href="https://corkwooburgreen.co.uk/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_GB">
+  <meta property="og:site_name" content="Cork Wine Bar Bistro">
+  <meta property="og:title" content="Cork · Wine Bar Bistro · Wooburn Green">
+  <meta property="og:description"
+    content="Intimate Italian wine bar in Wooburn Green: 25+ artisanal cheeses, taglieri, curated Italian wines, live music & private events.">
+  <meta property="og:url" content="https://corkwooburgreen.co.uk/">
+  <meta property="og:image"
+    content="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80">
+  <meta property="og:image:alt" content="Tagliere di salumi misti italiani">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Cork · Wine Bar Bistro · Wooburn Green">
+  <meta name="twitter:description"
+    content="Intimate Italian wine bar in Wooburn Green: 25+ artisanal cheeses, taglieri, curated Italian wines.">
+  <meta name="twitter:image"
+    content="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500&display=swap"
@@ -47,6 +64,7 @@
 </head>
 
 <body>
+  <a class="skip" href="#menu">Skip to menu</a>
   <nav>
     <a href="#hero" class="logo">CORK<em>·</em></a>
     <button id="menuToggle" class="hamburger" aria-label="Toggle menu">☰</button>
@@ -99,12 +117,12 @@
               alt="Bistrot e interni accoglienti" loading="lazy">
           </div>
         </div>
-        <button class="carousel-btn prev" onclick="moveHeroSlide(-1)">&#10094;</button>
-        <button class="carousel-btn next" onclick="moveHeroSlide(1)">&#10095;</button>
+        <button class="carousel-btn prev" onclick="moveHeroSlide(-1)" aria-label="Previous photo">&#10094;</button>
+        <button class="carousel-btn next" onclick="moveHeroSlide(1)" aria-label="Next photo">&#10095;</button>
         <div class="carousel-nav">
-          <button class="carousel-indicator active" onclick="setHeroSlide(0)"></button>
-          <button class="carousel-indicator" onclick="setHeroSlide(1)"></button>
-          <button class="carousel-indicator" onclick="setHeroSlide(2)"></button>
+          <button class="carousel-indicator active" onclick="setHeroSlide(0)" aria-label="Show photo 1"></button>
+          <button class="carousel-indicator" onclick="setHeroSlide(1)" aria-label="Show photo 2"></button>
+          <button class="carousel-indicator" onclick="setHeroSlide(2)" aria-label="Show photo 3"></button>
         </div>
       </div>
     </div>
@@ -129,12 +147,12 @@
                 alt="Interni del bistrot" loading="lazy">
             </div>
           </div>
-          <button class="carousel-btn prev" onclick="moveAboutSlide(-1)">&#10094;</button>
-          <button class="carousel-btn next" onclick="moveAboutSlide(1)">&#10095;</button>
+          <button class="carousel-btn prev" onclick="moveAboutSlide(-1)" aria-label="Previous photo">&#10094;</button>
+          <button class="carousel-btn next" onclick="moveAboutSlide(1)" aria-label="Next photo">&#10095;</button>
           <div class="carousel-nav">
-            <button class="carousel-indicator active" onclick="setAboutSlide(0)"></button>
-            <button class="carousel-indicator" onclick="setAboutSlide(1)"></button>
-            <button class="carousel-indicator" onclick="setAboutSlide(2)"></button>
+            <button class="carousel-indicator active" onclick="setAboutSlide(0)" aria-label="Show photo 1"></button>
+            <button class="carousel-indicator" onclick="setAboutSlide(1)" aria-label="Show photo 2"></button>
+            <button class="carousel-indicator" onclick="setAboutSlide(2)" aria-label="Show photo 3"></button>
           </div>
         </div>
       </div>
